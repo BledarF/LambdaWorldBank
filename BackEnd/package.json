@@ -1,0 +1,19 @@
+{
+  "name": "fullstaq",
+  "version": "1.0.0",
+  "description": "Trying to make a SERN app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "NJ",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "sqlite3": "^4.2.0"
+  }
+}
