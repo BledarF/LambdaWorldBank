@@ -3,7 +3,7 @@ const sqlite3 = require("sqlite3");
 const lambdaDb = new sqlite3.Database("/lambdadb.sqlite");
 
 lambdaDb.serialize(() => {
-  lambdaDb.run("DROP TABLE IF EXISTS stories lambdaDb");
+  lambdaDb.run("DROP TABLE IF EXISTS searches lambdaDb");
 
   lambdaDb.run(
     `CREATE TABLE users (
@@ -16,27 +16,27 @@ lambdaDb.serialize(() => {
 )`
   );
 
-  lambdaDb.run(
-    `CREATE TABLE admin (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
- FOREIGN KEY (user_id) REFERENCES users(id)
-)`
-  );
+  //   lambdaDb.run(
+  //     `CREATE TABLE admin (
+  //   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //  FOREIGN KEY (user_id) REFERENCES users(id)
+  // )`
+  //   );
 
-  lambdaDb.run(
-    `CREATE TABLE sessions (
-  uuid TEXT PRIMARY KEY,
-  created_at DATETIME NOT NULL,
-  user_id INTEGER
-)`
-  );
+  //   lambdaDb.run(
+  //     `CREATE TABLE sessions (
+  //   uuid TEXT PRIMARY KEY,
+  //   created_at DATETIME NOT NULL,
+  //   user_id INTEGER
+  // )`
+  //   );
 
-  lambdaDb.run(`CREATE TABLE searches (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    country_id INTEGER,
-    metric_id INTEGER,
-    user_id INTEGER,
-    start_year DATETIME NOT NULL,
-    end_year DATETIME NOT NULL
-  )`);
+  //   lambdaDb.run(`CREATE TABLE searches (
+  //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //     country_id INTEGER,
+  //     metric_id INTEGER,
+  //     user_id INTEGER,
+  //     start_year DATETIME NOT NULL,
+  //     end_year DATETIME NOT NULL
+  //   )`);
 });
