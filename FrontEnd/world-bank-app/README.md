@@ -1,5 +1,9 @@
 # Full Stack Group Project Team Lambda- Front End
 
+## Project Overview
+
+After spending 9 weeks learning the basics of fullstack web development- how to build servers, create React apps and tie them together using API requests- we have been tasked with building a fullstack project to bring together everything that we have learnt so far.
+
 ## Requirements
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). For development, you will only need React installed on your environment.
@@ -52,4 +56,22 @@ CSS
 Express
 SQLite
 
-## F
+## Team Members & Roles
+
+- Bledar Ferati - Engineer - Architect & Dev Ops
+- Kobithasan Vasantharajah - Engineer - QA Test
+- Nathan Johnston - Engineer - Project Manager
+
+## What did you learn?
+
+- Work in a team to build a full stack applications
+- List the roles and functions of a Project Manager, a QA Tester and Architect & DevOps
+- Open a pull request, receive feedback on their code and implement that feedback
+- Give useful, actionable feedback on a team members pull request
+- Convert user stories into actionable tickets
+- Convert actionable tickets into production-ready features
+- Compare and contrast different workflows (e.g. waterfall, agile)
+- Run and be a member of an Agile team including
+- Understanding the aims of and taking part in a Stand-Up
+- Understanding the aims of and taking part in a Retrospective
+- Understanding the aims of and taking part in a Planning Session
