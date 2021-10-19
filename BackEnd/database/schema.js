@@ -3,7 +3,7 @@ const sqlite3 = require("sqlite3");
 const lambdaDb = new sqlite3.Database("./lambdaDb.db");
 
 lambdaDb.serialize(() => {
-  // lambdaDb.run("DROP TABLE IF EXISTS users,");
+  lambdaDb.run("DROP TABLE IF EXISTS users");
 
   lambdaDb.run(
     `CREATE TABLE users (
@@ -16,6 +16,8 @@ lambdaDb.serialize(() => {
 )`
   );
 
+  lambdaDb.run("DROP TABLE IF EXISTS admin");
+
   lambdaDb.run(
     `CREATE TABLE admin (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,6 +26,8 @@ lambdaDb.serialize(() => {
   )`
   );
 
+  lambdaDb.run("DROP TABLE IF EXISTS sessions");
+
   lambdaDb.run(
     `CREATE TABLE sessions (
     uuid TEXT PRIMARY KEY,
@@ -31,6 +35,8 @@ lambdaDb.serialize(() => {
     user_id INTEGER
   )`
   );
+
+  lambdaDb.run("DROP TABLE IF EXISTS searches");
 
   lambdaDb.run(`CREATE TABLE searches (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -4,7 +4,7 @@
 const sqlite3 = require("sqlite3");
 
 // Import lambdadb
-const db = new sqlite3.Database("./lambdadb.sqlite");
+const db = new sqlite3.Database("./lambdaDb.sqlite");
 
 // Fill tables with seed data (DOESN'T FILL AUTO-INCREMENT COLUMNS)
 db.serialize(() => {
