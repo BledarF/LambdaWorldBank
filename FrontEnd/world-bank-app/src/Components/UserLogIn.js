@@ -1,15 +1,14 @@
-import react, { useState } from 'react'
-import './UserLogIn.css'
+import react, { useState } from "react";
+import "./UserLogIn.css";
 
 function UserLogIn() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <form className="log-in-form">
       <label>
-        {' '}
+        {" "}
         Username:
         <input
           value={username}
@@ -20,7 +19,7 @@ function UserLogIn() {
         />
       </label>
       <label>
-        {' '}
+        {" "}
         Password:
         <input
           value={password}
@@ -30,20 +29,9 @@ function UserLogIn() {
           required
         />
       </label>
-      <label>
-        {' '}
-        Confirm Password:
-        <input
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)}
-          type="password"
-          name="passwordConfirmation"
-          required
-        />
-      </label>
       <button type="submit">Log In</button>
     </form>
-  )
+  );
 }
 
-export default UserLogIn
+export default UserLogIn;
