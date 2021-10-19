@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 
 function SearchData() {
-  const [selectedCountries, setCountry] = useState([]);
-  const [selectedIndicators, setIndicator] = useState([]);
+  const [selectCountry, setCountry] = useState();
+  const [selectIndicator, setIndicator] = useState();
+  const [allCountries, setCountries] = useState([
+    { countryName: "", indicator: "" },
+  ]);
+  const [allIndicators, setIndicators] = useState([]);
   const [startYear, setStartYear] = useState([]);
   const [endYear, setEndYear] = useState([]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(selectedCountries);
-    console.log(startYear);
-    console.log(endYear);
 
     const submitSearchUrl = `http://localhost:8080/add`;
     const response = await searchInfo(
       submitSearchUrl,
-      selectedCountries,
-      selectedIndicators,
+      allCountries,
+      allIndicators,
       startYear,
       endYear
     );
@@ -48,20 +49,9 @@ function SearchData() {
     return addResponse;
   }
 
-  //   function addCountry(selectedCountries) {
-  //     setCountry((prevState) => [...prevState, e.target.value]);
-
-  //     return (
-  //       <input
-  //         value={selectedCountries}
-  //         onChange={(e) =>
-  //           setCountry((prevState) => [...prevState, e.target.value])
-  //         }
-  //         name="countryName"
-  //         required
-  //       />
-  //     );
-  //   }
+  function addCountry() {
+    setCountries((prevState) => [...prevState, selectCountry]);
+  }
 
   return (
     <div>
@@ -71,18 +61,18 @@ function SearchData() {
           {" "}
           Countries
           <input
-            value={selectedCountries}
+            value={selectCountry}
             onChange={(e) => setCountry(e.target.value)}
             name="countryName"
             required
           />
         </label>
-        {/* <button onClick={}>+</button> */}
+        <button onClick={addCountry}>+</button>
         <label>
           {" "}
           Indicators
           <input
-            value={selectedIndicators}
+            value={selectIndicator}
             onChange={(e) => setIndicator(e.target.value)}
             name="indicatorName"
             required
