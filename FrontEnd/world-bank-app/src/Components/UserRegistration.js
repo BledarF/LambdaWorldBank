@@ -21,8 +21,7 @@ function UserRegistration() {
       const createAccountResponse = await createAccount(
         url,
         username,
-        password,
-        passwordConfirmation
+        password
       );
       console.log(createAccountResponse);
 
