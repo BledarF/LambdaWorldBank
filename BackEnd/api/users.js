@@ -40,7 +40,9 @@ usersRouter.get("/:userId", (req, res, next) => {
 
 // Post a user
 usersRouter.post("/", (req, res, next) => {
+  console.log(req.body);
   const username = req.body.user.username;
+  console.log(username);
   const password = req.body.user.password;
   const salt = "changeme";
   const currentDateAndTime = new Date().toString();
@@ -75,8 +77,7 @@ usersRouter.post("/", (req, res, next) => {
 
 // Update user (username, password, salt, updated_at)
 usersRouter.put("/:userId", (req, res, next) => {
-  const username = req.body.user.username;
-  const password = req.body.user.password;
+  const { username, password } = req.body;
   const salt = "changeme2";
   const currentDateAndTime = new Date().toString();
   if (!username || !password) {
