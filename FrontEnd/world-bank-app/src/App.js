@@ -1,6 +1,6 @@
-import logo from './logo.svg'
-import './App.css'
-import UserLogIn from './Components/UserLogIn'
+import "./App.css";
+import UserRegistration from "./Components/UserRegistration";
+import UserLogIn from "./Components/UserLogIn";
 
 function App() {
   return (
@@ -8,9 +8,10 @@ function App() {
       <header className="App-header">
         <h1>WORLD BANK PROJECT</h1>
         <UserLogIn />
+        <UserRegistration />
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
