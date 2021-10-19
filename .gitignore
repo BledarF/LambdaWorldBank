@@ -1,3 +1,4 @@
 
 .DS_Store
 BackEnd/database/lambdaDb.db
+*.db
