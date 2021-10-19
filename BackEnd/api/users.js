@@ -73,7 +73,7 @@ usersRouter.post("/", (req, res, next) => {
   });
 });
 
-// Update a user
+// Update user (username, password, salt, updated_at)
 usersRouter.put("/:userId", (req, res, next) => {
   const username = req.body.user.username;
   const password = req.body.user.password;
@@ -89,6 +89,7 @@ usersRouter.put("/:userId", (req, res, next) => {
     $password: password,
     $salt: salt,
     $updated_at: currentDateAndTime,
+    $userId: req.params.userId,
   };
 
   lambdaDb.run(sql, values, (error) => {
@@ -107,14 +108,14 @@ usersRouter.put("/:userId", (req, res, next) => {
 
 // Delete a user
 usersRouter.delete("/:userId", (req, res, next) => {
-  const sql = "DELETE FROM user WHERE users.id = $userId";
+  const sql = "DELETE FROM users WHERE users.id = $userId";
   const values = { $userId: req.params.userId };
 
   lambdaDb.run(sql, values, (error) => {
     if (error) {
       next(error);
     } else {
-      lambdaDb.get(
+      db.get(
         `SELECT * FROM users WHERE users.id = ${req.params.userId}`,
         (error, user) => {
           res.status(200).send("User deleted. ");
