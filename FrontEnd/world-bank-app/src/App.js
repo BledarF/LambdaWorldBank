@@ -13,6 +13,9 @@ function App() {
       <div className="App">
         <main className="App-header">
           <Switch>
+            {/* <Route path="/home">
+              <SearchData />
+            </Route> */}
             <Route path="/login">
               <UserLogin />
             </Route>
