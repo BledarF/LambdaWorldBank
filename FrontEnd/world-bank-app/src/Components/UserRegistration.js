@@ -50,20 +50,21 @@ function UserRegistration() {
       username: username,
       password: password,
     };
+    //console.log(body);
     try {
       const createAccountResponse = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ user: body }),
       });
 
       const json = await createAccountResponse.json();
-      console.log(json);
+      console.log(json.error);
 
-      if (!json.msg) {
-        return "That username is taken. Try another.";
+      if (json.error === "Username already in use. ") {
+        setError(json.error);
       } else {
-        return "";
+        setError("");
       }
     } catch (error) {
       return error;
