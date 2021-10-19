@@ -40,9 +40,10 @@ usersRouter.get("/:userId", (req, res, next) => {
 
 // Post a user
 usersRouter.post("/", (req, res, next) => {
-  console.log(req.body);
+
   const { username, password } = req.body.user;
   console.log(username, password);
+
   const salt = "changeme";
   const currentDateAndTime = new Date().toString();
 
