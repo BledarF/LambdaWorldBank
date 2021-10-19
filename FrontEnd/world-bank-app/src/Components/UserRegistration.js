@@ -8,7 +8,7 @@ function UserRegistration() {
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/users";
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     const validationResult = await validate(
       username,
@@ -23,11 +23,12 @@ function UserRegistration() {
         username,
         password
       );
+
       console.log(createAccountResponse);
 
       // setError(createAccountResponse);
     }
-  };
+  }
 
   async function validate(username, password, passwordConfirmation) {
     if (!username) {
