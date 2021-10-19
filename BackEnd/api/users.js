@@ -62,7 +62,7 @@ usersRouter.post("/", (req, res, next) => {
 
   lambdaDb.run(sql, values, function (error) {
     if (error) {
-      // next(error)
+      // next(error) djbfjab
       res.status(400).send({ error: "Username already in use. " });
     } else {
       lambdaDb.get(
