@@ -44,6 +44,7 @@ lambdaDb.serialize(() => {
       metric_id INTEGER,
       user_id INTEGER,
       start_year DATETIME NOT NULL,
-      end_year DATETIME NOT NULL
+      end_year DATETIME NOT NULL,
+      searched_at DATETIME NOT NULL
     )`);
 });
