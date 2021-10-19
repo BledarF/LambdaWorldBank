@@ -26,9 +26,9 @@ sessionsRouter.post("/", (req, res, next) => {
   lambdaDb.get(sql, values, (error, result) => {
     if (!result.count) {
       // next(error)
-      res.status(400).send({ error: "Incorrect username or password. " });
+      res.status(400).send({ error: "Incorrect username or password." });
     } else if (result.count) {
-      res.status(201).send({ error: "Valid. " });
+      res.status(201).send({ error: "Valid." });
     } else {
       res.status(500).send({ error: "Server error." });
     }
