@@ -41,8 +41,7 @@ usersRouter.get("/:userId", (req, res, next) => {
 // Post a user
 usersRouter.post("/", (req, res, next) => {
   console.log(req.body);
-  const username = req.body.user.username;
-  console.log(username);
+  const { username, password } = req.body;
   const password = req.body.user.password;
   const salt = "changeme";
   const currentDateAndTime = new Date().toString();
