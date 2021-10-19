@@ -3,10 +3,6 @@ import React, { useState } from "react";
 function SearchData() {
   const [selectCountry, setCountry] = useState();
   const [selectIndicator, setIndicator] = useState();
-  const [allCountries, setCountries] = useState([
-    { countryName: "", indicator: "" },
-  ]);
-  const [allIndicators, setIndicators] = useState([]);
   const [startYear, setStartYear] = useState([]);
   const [endYear, setEndYear] = useState([]);
 
@@ -16,13 +12,15 @@ function SearchData() {
     const submitSearchUrl = `http://localhost:8080/add`;
     const response = await searchInfo(
       submitSearchUrl,
-      allCountries,
-      allIndicators,
+      selectCountry,
+      selectIndicator,
       startYear,
       endYear
     );
 
-    // const jsonResponse = await response.json();
+    const jsonResponse = await response.json();
+
+    console.log(jsonResponse);
   }
 
   async function searchInfo(
@@ -49,10 +47,6 @@ function SearchData() {
     return addResponse;
   }
 
-  function addCountry() {
-    setCountries((prevState) => [...prevState, selectCountry]);
-  }
-
   return (
     <div>
       {/* <NavBar /> */}
@@ -67,7 +61,6 @@ function SearchData() {
             required
           />
         </label>
-        <button onClick={addCountry}>+</button>
         <label>
           {" "}
           Indicators
