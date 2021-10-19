@@ -17,20 +17,20 @@ sessionsRouter.post("/", (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  const sql = `SELECT COUNT(*) FROM users WHERE users.username = $username AND users.password = $password`;
+  const sql = `SELECT COUNT(*) count FROM users WHERE username = $username AND password = $password`;
   const values = {
     $username: username,
     $password: password,
   };
 
-  lambdaDb.run(sql, values, function (error) {
-    if (error) {
+  lambdaDb.get(sql, values, (error, result) => {
+    if (!result.count) {
       // next(error)
       res.status(400).send({ error: "Incorrect username or password. " });
+    } else if (result.count) {
+      res.status(201).send({ error: "Valid. " });
     } else {
-      lambdaDb.get(sql, (error, count) => {
-        res.status(201).json({ count: count });
-      });
+      res.status(500).send({ error: "Server error." });
     }
   });
 });
