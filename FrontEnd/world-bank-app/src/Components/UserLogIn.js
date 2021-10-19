@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./UserLogin.css";
+import { useHistory } from "react-router-dom";
 
 function UserLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/sessions";
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +17,6 @@ function UserLogin() {
     } else {
       const getAccountResponse = await getAccount(url, username, password);
       console.log(getAccountResponse);
-
-      // setError(createAccountResponse);
     }
   };
 
@@ -54,6 +54,7 @@ function UserLogin() {
         setError("Invalid Username/password");
       } else {
         setError("");
+        history.push("/home");
       }
     } catch (error) {
       return error;

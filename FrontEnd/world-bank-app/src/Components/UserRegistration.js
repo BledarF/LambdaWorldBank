@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./UserRegistration.css";
+import { useHistory } from "react-router-dom";
 
 function UserRegistration() {
   const [username, setUsername] = useState("");
@@ -7,6 +8,7 @@ function UserRegistration() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/users";
+  const history = useHistory();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,8 +27,6 @@ function UserRegistration() {
       );
 
       console.log(createAccountResponse);
-
-      // setError(createAccountResponse);
     }
   }
 
@@ -66,6 +66,7 @@ function UserRegistration() {
         setError(json.error);
       } else {
         setError("");
+        history.push("/home");
       }
     } catch (error) {
       return error;

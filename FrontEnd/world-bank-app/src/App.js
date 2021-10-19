@@ -3,6 +3,7 @@ import "./App.css";
 import React from "react";
 import UserLogin from "./Components/UserLogin.js";
 import UserRegistration from "./Components/UserRegistration.js";
+import SearchData from "./Components/SearchData.js";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -13,6 +14,9 @@ function App() {
       <div className="App">
         <main className="App-header">
           <Switch>
+            <Route path="/home">
+              <SearchData />
+            </Route>
             <Route path="/login">
               <UserLogin />
             </Route>
