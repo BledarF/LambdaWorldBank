@@ -1,19 +1,33 @@
 import "./App.css";
-import UserRegistration from "./Components/UserRegistration";
-import UserLogin from "./Components/UserLogin";
-import SearchData from "./Components/SearchData";
+
+import React from "react";
+import UserLogin from "./Components/UserLogin.js";
+import UserRegistration from "./Components/UserRegistration.js";
+
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>WORLD BANK PROJECT</h1>
-
-        <UserLogin />
-        <UserRegistration />
-        <SearchData />
-      </header>
-    </div>
+    <Router>
+      {/* <Header /> */}
+      <div className="App">
+        <main className="App-header">
+          <Switch>
+            <Route path="/login">
+              <UserLogin />
+            </Route>
+            <Route path="/sign-up">
+              <UserRegistration />
+            </Route>
+            <Route path="/">
+              <UserLogin />
+              <UserRegistration />
+            </Route>
+          </Switch>
+        </main>
+      </div>
+      {/* <Footer /> */}
+    </Router>
   );
 }
 
