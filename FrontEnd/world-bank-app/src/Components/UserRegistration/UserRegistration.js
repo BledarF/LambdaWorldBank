@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./UserRegistration.css";
 import { useHistory } from "react-router-dom";
 
-function UserRegistration() {
+function UserRegistration(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -12,6 +12,11 @@ function UserRegistration() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log(props);
+    if (props.submit) {
+      props.submit(username, password, passwordConfirmation);
+    }
+
     const validationResult = await validate(
       username,
       password,
@@ -68,10 +73,14 @@ function UserRegistration() {
   }
 
   return (
-    <form className="log-in-form" onSubmit={handleSubmit}>
+    <form
+      className="log-in-form"
+      onSubmit={handleSubmit}
+      data-testid="userRegistration-1"
+    >
       <label>
         {" "}
-        Username:
+        Username
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -82,7 +91,7 @@ function UserRegistration() {
       </label>
       <label>
         {" "}
-        Password:
+        Password
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -93,7 +102,7 @@ function UserRegistration() {
       </label>
       <label>
         {" "}
-        Confirm Password:
+        Confirm Password
         <input
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}

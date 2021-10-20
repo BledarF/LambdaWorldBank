@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./SearchData.css";
 
 function SearchData() {
   const [selectCountry, setCountry] = useState();
