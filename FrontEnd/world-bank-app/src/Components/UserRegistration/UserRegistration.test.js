@@ -14,9 +14,9 @@ it("renders without crashing", () => {
 it("should have username, password, confirm password field and submit/register button", () => {
   render(<UserRegistration />);
 
-  const username = screen.getByLabelText("Username");
-  const password = screen.getByLabelText("Password");
-  const confirmPassword = screen.getByLabelText("Confirm Password");
+  const username = screen.getByLabelText("Username:");
+  const password = screen.getByLabelText("Password:");
+  const confirmPassword = screen.getByLabelText("Confirm Password:");
   const registerButton = screen.getByText("Register");
 
   expect(username).toBeInTheDocument();
@@ -29,9 +29,9 @@ it("should allow the user to submit their credentials", () => {
   const submit = jest.fn();
   render(<UserRegistration submit={submit} />);
 
-  const usernameField = screen.getByLabelText("Username");
-  const passwordField = screen.getByLabelText("Password");
-  const confirmPasswordField = screen.getByLabelText("Confirm Password");
+  const usernameField = screen.getByLabelText("Username:");
+  const passwordField = screen.getByLabelText("Password:");
+  const confirmPasswordField = screen.getByLabelText("Confirm Password:");
   const registerButton = screen.getByText("Register");
 
   userEvent.type(usernameField, "kobi@sigmalabs.xyz");

@@ -80,7 +80,7 @@ function UserRegistration(props) {
     >
       <label>
         {" "}
-        Username
+        Username:
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -91,7 +91,7 @@ function UserRegistration(props) {
       </label>
       <label>
         {" "}
-        Password
+        Password:
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -102,7 +102,7 @@ function UserRegistration(props) {
       </label>
       <label>
         {" "}
-        Confirm Password
+        Confirm Password:
         <input
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
