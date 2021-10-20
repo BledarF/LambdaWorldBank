@@ -2,14 +2,15 @@
 
 const express = require("express");
 const sessionsRouter = express.Router();
+const bcrypt = require("bcrypt");
 
 const sqlite3 = require("sqlite3");
 const lambdaDb = new sqlite3.Database("./database/lambdaDb.db");
 
 // Post user login
-sessionsRouter.post("/", (req, res, next) => {
-  const username = req.body.user.username;
-  const password = req.body.user.password;
+sessionsRouter.post("/", async (req, res, next) => {
+  const { username, password } = req.body.user;
+  console.log(username);
   //   const salt = "changeme";
   //   const currentDateAndTime = new Date().toString();
 
@@ -17,17 +18,18 @@ sessionsRouter.post("/", (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  const sql = `SELECT COUNT(*) count FROM users WHERE username = $username AND password = $password`;
+  const sql = `SELECT password FROM users WHERE username = $username`;
   const values = {
     $username: username,
-    $password: password,
   };
 
-  lambdaDb.get(sql, values, (error, result) => {
-    if (!result.count) {
+  lambdaDb.get(sql, values, async (error, result) => {
+    const hashedPassword = result.password;
+    const authenticatePassword = await bcrypt.compare(password, hashedPassword);
+    if (!result.password) {
       // next(error)
       res.status(400).send({ error: "Incorrect username or password." });
-    } else if (result.count) {
+    } else if (authenticatePassword) {
       res.status(201).send({ error: "Valid." });
     } else {
       res.status(500).send({ error: "Server error." });

@@ -20,13 +20,7 @@ function UserRegistration() {
     if (validationResult) {
       setError(validationResult);
     } else {
-      const createAccountResponse = await createAccount(
-        url,
-        username,
-        password
-      );
-
-      console.log(createAccountResponse);
+      await createAccount(url, username, password);
     }
   }
 
