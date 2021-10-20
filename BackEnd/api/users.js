@@ -5,6 +5,13 @@ const usersRouter = express.Router();
 
 const sqlite3 = require("sqlite3");
 const lambdaDb = new sqlite3.Database("./database/lambdaDb.db");
+const bcrypt = require("bcrypt");
+
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(5);
+  const hash = await bcrypt.hash(password, salt);
+  return [hash, salt];
+}
 
 // Defining userId param
 usersRouter.param("userId", (req, res, next, userId) => {
@@ -39,12 +46,13 @@ usersRouter.get("/:userId", (req, res, next) => {
 });
 
 // Post a user
-usersRouter.post("/", (req, res, next) => {
-
+usersRouter.post("/", async (req, res, next) => {
   const { username, password } = req.body.user;
-  console.log(username, password);
 
-  const salt = "changeme";
+  const hashSaltArray = await hashPassword(password);
+  const hash = hashSaltArray[0];
+  const salt = hashSaltArray[1];
+
   const currentDateAndTime = new Date().toString();
 
   if (!username || !password) {
@@ -52,10 +60,10 @@ usersRouter.post("/", (req, res, next) => {
   }
 
   const sql = `INSERT INTO users (username, password, salt, created_at, updated_at)
-    VALUES ($username, $password, $salt, $created_at, $updated_at)`;
+    VALUES ($username, $hash, $salt, $created_at, $updated_at)`;
   const values = {
     $username: username,
-    $password: password,
+    $hash: hash,
     $salt: salt,
     $created_at: currentDateAndTime,
     $updated_at: currentDateAndTime,
@@ -63,8 +71,7 @@ usersRouter.post("/", (req, res, next) => {
 
   lambdaDb.run(sql, values, function (error) {
     if (error) {
-      // next(error) djbfjab
-      res.status(400).send({ error: "Username already in use. " });
+      res.status(400).send({ error: "Username already in use." });
     } else {
       lambdaDb.get(
         `SELECT * FROM users WHERE users.id = ${this.lastID}`,
