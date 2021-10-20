@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import "./UserLogin.css";
 import { useHistory } from "react-router-dom";
 
-function UserLogin() {
+function UserLogin(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/sessions";
   const history = useHistory();
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
+    if (props.submit) {
+      props.submit(username, password);
+    }
     const validationResult = await validate(username, password);
     if (validationResult) {
       setError(validationResult);
@@ -18,7 +21,7 @@ function UserLogin() {
       const getAccountResponse = await getAccount(url, username, password);
       console.log(getAccountResponse);
     }
-  };
+  }
 
   async function validate(username, password) {
     if (!username) {
