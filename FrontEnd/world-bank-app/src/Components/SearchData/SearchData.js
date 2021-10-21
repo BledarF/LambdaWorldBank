@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Logout from "../Logout.js";
+import Logout from "../Logout/Logout.js";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
@@ -53,47 +54,52 @@ function SearchData(props) {
     <div>
       <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
       {/* <NavBar /> */}
-      <form className="SearchDataContainer" onSubmit={handleSubmit}>
-        <label>
-          {" "}
-          Countries
-          <input
-            value={selectCountry}
-            onChange={(e) => setCountry(e.target.value)}
-            name="countryName"
-            required
-          />
-        </label>
-        <label>
-          {" "}
-          Indicators
-          <input
-            value={selectIndicator}
-            onChange={(e) => setIndicator(e.target.value)}
-            name="indicatorName"
-            required
-          />
-        </label>
-        <button>+</button>
-        <label>
-          {" "}
-          Year Range
-          <input
-            value={startYear}
-            onChange={(e) => setStartYear(e.target.value)}
-            name="startYear"
-            required
-          />
-          <input
-            value={endYear}
-            onChange={(e) => setEndYear(e.target.value)}
-            name="endYear"
-            required
-          />
-        </label>
-        <button type="submit">Search</button>
+      <Form className="SearchDataContainer" onSubmit={handleSubmit}>
+        <Row>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Countries</Form.Label>
+              <Form.Control
+                value={selectCountry}
+                onChange={(e) => setCountry(e.target.value)}
+                name="countryName"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Indicators</Form.Label>
+              <Form.Control
+                value={selectIndicator}
+                onChange={(e) => setIndicator(e.target.value)}
+                name="indicatorName"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Year Range</Form.Label>
+              <Form.Control
+                value={startYear}
+                onChange={(e) => setStartYear(e.target.value)}
+                name="startYear"
+                required
+              />
+              <Form.Control
+                value={endYear}
+                onChange={(e) => setEndYear(e.target.value)}
+                name="endYear"
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button type="submit">Search</Button>
         {/* {<p id="error-msg">{error}</p>} */}
-      </form>
+      </Form>
     </div>
   );
 }

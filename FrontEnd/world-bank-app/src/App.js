@@ -6,6 +6,8 @@ import UserRegistration from "./Components/UserRegistration/UserRegistration.js"
 import SearchData from "./Components/SearchData/SearchData.js";
 import Chart from "./Components/Chart/TestChart";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
@@ -61,7 +63,7 @@ function App() {
                   <UserRegistration />
                 </div>
               )}
-              <Route />
+            </Route>
             <Route path="/chart">
               <Chart />
             </Route>

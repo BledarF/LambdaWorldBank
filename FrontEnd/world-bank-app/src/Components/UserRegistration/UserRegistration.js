@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import "./UserRegistration.css";
 
-function UserRegistration(props) {
+function UserRegistration() {
   const [values, setValues] = useState({
     username: "",
     password: "",
@@ -12,16 +13,10 @@ function UserRegistration(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // if (props.submit) {
-    //   props.submit(username, password, passwordConfirmation);
-    // }
-
     const { username, password, passwordConfirmation } = values;
-    const validationResult = await validate(
-      username,
-      password,
-      passwordConfirmation
-    );
+    console.log(username, password, passwordConfirmation);
+
+    const validationResult = validate(username, password, passwordConfirmation);
     if (validationResult) {
       setError(validationResult);
     } else {
@@ -61,51 +56,56 @@ function UserRegistration(props) {
   }
 
   return (
-    <form
-      className="log-in-form"
-      onSubmit={handleSubmit}
-      data-testid="userRegistration-1"
-    >
-      <label>
-        {" "}
-        Username:
-        <input
-          value={values.username}
-          onChange={handleChange}
-          type="email"
-          name="username"
-          required
-        />
-      </label>
-      <label>
-        {" "}
-        Password:
-        <input
-          value={values.password}
-          onChange={handleChange}
-          type="password"
-          name="password"
-          required
-        />
-      </label>
-      <label>
-        {" "}
-        Confirm Password:
-        <input
-          value={values.passwordConfirmation}
-          onChange={handleChange}
-          type="password"
-          name="passwordConfirmation"
-          required
-        />
-      </label>
-      <button type="submit">Register</button>
-      {<p id="error-msg">{error}</p>}
-    </form>
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col md>
+            <Form.Group controlId="formEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="example@email.com"
+                value={values.username}
+                name="username"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="passwordConfirmation"
+                value={values.passwordConfirmation}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Button variant="secondary" type="submit">
+          Register
+        </Button>
+        {<p id="error-msg">{error}</p>}
+      </Form>
+    </Container>
   );
 }
 
-async function validate(username, password, passwordConfirmation) {
+function validate(username, password, passwordConfirmation) {
   if (!username) {
     return "Email address is required";
   } else if (!/\S+@\S+\.\S+/.test(username)) {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function Logout(props) {
   const [error, setError] = useState("");
@@ -35,9 +36,9 @@ function Logout(props) {
   }
 
   return (
-    <button id="logout" onClick={handleLogout}>
+    <Button id="logout" onClick={handleLogout}>
       Logout!{" "}
-    </button>
+    </Button>
   );
 }
 
