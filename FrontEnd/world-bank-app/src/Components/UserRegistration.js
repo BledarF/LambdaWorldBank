@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./UserRegistration.css";
-import { useHistory } from "react-router-dom";
 
 function UserRegistration() {
   const [username, setUsername] = useState("");
@@ -8,7 +7,6 @@ function UserRegistration() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/users";
-  const history = useHistory();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,7 +43,7 @@ function UserRegistration() {
       username: username,
       password: password,
     };
-    //console.log(body);
+
     try {
       const createAccountResponse = await fetch(url, {
         method: "POST",
@@ -54,13 +52,10 @@ function UserRegistration() {
       });
 
       const json = await createAccountResponse.json();
-      console.log(json.error);
-
       if (json.error === "Username already in use. ") {
         setError(json.error);
       } else {
-        setError("");
-        history.push("/home");
+        setError("Success! Account created.");
       }
     } catch (error) {
       return error;
