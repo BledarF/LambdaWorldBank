@@ -34,10 +34,6 @@ function UserRegistration(props) {
       username: username,
       password: password,
     };
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     try {
       const createAccountResponse = await fetch(url, {
         method: "POST",

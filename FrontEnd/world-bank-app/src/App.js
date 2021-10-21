@@ -49,7 +49,6 @@ function App() {
                 />
               )}
             </Route>
-<<<<<<< Updated upstream
             <Route path="/">
               {loggedIn ? (
                 <Redirect to="/home" />
@@ -62,14 +61,13 @@ function App() {
                   <UserRegistration />
                 </div>
               )}
-=======
+              <Route />
             <Route path="/chart">
               <Chart />
             </Route>
             <Route exact path="/">
               <UserLogin />
               <UserRegistration />
->>>>>>> Stashed changes
             </Route>
           </Switch>
         </main>
