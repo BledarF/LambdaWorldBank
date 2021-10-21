@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import UserLogin from "./Components/UserLogin/UserLogin.js";
 import UserRegistration from "./Components/UserRegistration/UserRegistration.js";
 import SearchData from "./Components/SearchData/SearchData.js";
+import Chart from "./Components/Chart/TestChart";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";
@@ -48,6 +49,7 @@ function App() {
                 />
               )}
             </Route>
+<<<<<<< Updated upstream
             <Route path="/">
               {loggedIn ? (
                 <Redirect to="/home" />
@@ -60,6 +62,14 @@ function App() {
                   <UserRegistration />
                 </div>
               )}
+=======
+            <Route path="/chart">
+              <Chart />
+            </Route>
+            <Route exact path="/">
+              <UserLogin />
+              <UserRegistration />
+>>>>>>> Stashed changes
             </Route>
           </Switch>
         </main>
