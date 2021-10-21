@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import "./UserLogin.css";
-import { useHistory } from "react-router-dom";
 
 function UserLogin(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/sessions";
-  const history = useHistory();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,8 +16,7 @@ function UserLogin(props) {
     if (validationResult) {
       setError(validationResult);
     } else {
-      const getAccountResponse = await getAccount(url, username, password);
-      console.log(getAccountResponse);
+      await getAccount(url, username, password);
     }
   }
 
@@ -38,6 +35,8 @@ function UserLogin(props) {
   }
 
   async function getAccount(url, username, password) {
+    const { fetchActiveSession } = props;
+
     const body = {
       username: username,
       password: password,
@@ -46,18 +45,18 @@ function UserLogin(props) {
     try {
       const getAccountResponse = await fetch(url, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user: body }),
       });
 
       const json = await getAccountResponse.json();
-      console.log(json.error);
 
       if (!(json.error === "Valid.")) {
         setError("Invalid Username/password");
       } else {
         setError("");
-        history.push("/home");
+        fetchActiveSession();
       }
     } catch (error) {
       return error;

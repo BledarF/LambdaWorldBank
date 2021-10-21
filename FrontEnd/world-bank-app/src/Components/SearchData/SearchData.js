@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./SearchData.css";
+import Logout from "./Logout.js";
 
-function SearchData() {
+function SearchData(props) {
   const [selectCountry, setCountry] = useState();
   const [selectIndicator, setIndicator] = useState();
   const [startYear, setStartYear] = useState([]);
@@ -10,7 +10,7 @@ function SearchData() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const submitSearchUrl = `http://localhost:8080/add`;
+    const submitSearchUrl = `http://localhost:7000/api/searches`;
     const response = await searchInfo(
       submitSearchUrl,
       selectCountry,
@@ -40,6 +40,7 @@ function SearchData() {
 
     const addResponse = await fetch(url, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -48,8 +49,11 @@ function SearchData() {
     return addResponse;
   }
 
+  const { fetchActiveSession, loggedIn } = props;
+
   return (
     <div>
+      <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
       {/* <NavBar /> */}
       <form className="SearchDataContainer" onSubmit={handleSubmit}>
         <label>
