@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Logout from "../Logout/Logout.js";
 import Chart from "../Chart/TestChart.js";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
@@ -69,9 +77,7 @@ function SearchData(props) {
 
     const jsonResponse = await addResponse.json();
 
-    console.log(jsonResponse);
-
-    setAllCountries(jsonResponse);
+    setAllCountries(jsonResponse.countries);
   }
 
   async function getIndicators() {
@@ -92,15 +98,16 @@ function SearchData(props) {
         <Form className="SearchDataContainer" onSubmit={handleSubmit}>
           <Row>
             <Col md>
-              <Form.Group>
-                <Form.Label>Countries</Form.Label>
-                <Form.Control
-                  value={selectCountry}
-                  onChange={(e) => setCountry(e.target.value)}
-                  name="countryName"
-                  required
-                />
-              </Form.Group>
+              <DropdownButton
+                id="dropdown-basic-button"
+                title={!selectCountry ? "Select Country" : selectCountry}
+              >
+                {allCountries.map((country) => (
+                  <Dropdown.Item onClick={() => setCountry(country)}>
+                    {country}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
             </Col>
             <Col md>
               <Form.Group>
