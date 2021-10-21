@@ -22,7 +22,7 @@ const client = new Client({
 });
 client.connect();
 client.query(
-  "SELECT value FROM indicators WHERE countrycode = 'GBR' LIMIT 1",
+  "SELECT indicatorname FROM indicators WHERE countrycode = 'ALB' LIMIT 1",
   (err, res) => {
     if (err) {
       console.log(err);

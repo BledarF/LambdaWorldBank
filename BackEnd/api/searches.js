@@ -54,7 +54,7 @@ searchesRouter.post("/", async (req, res, next) => {
         EndYear,
         result.rows
       );
-      res.status(201).send(data);
+      res.status(201).send({ data: data });
     }
   });
 });
