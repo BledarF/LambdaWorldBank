@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import "./UserRegistration.css";
 
 function UserRegistration(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+    passwordConfirmation: "",
+  });
   const [error, setError] = useState("");
   const url = "http://localhost:7000/api/users";
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(props);
-    if (props.submit) {
-      props.submit(username, password, passwordConfirmation);
-    }
+    // if (props.submit) {
+    //   props.submit(username, password, passwordConfirmation);
+    // }
 
+    const { username, password, passwordConfirmation } = values;
     const validationResult = await validate(
       username,
       password,
@@ -27,28 +29,11 @@ function UserRegistration(props) {
     }
   }
 
-  async function validate(username, password, passwordConfirmation) {
-    if (!username) {
-      return "Email address is required";
-    } else if (!/\S+@\S+\.\S+/.test(username)) {
-      return "Email address is invalid";
-    } else if (!password) {
-      return "Password is required";
-    } else if (password.length < 9) {
-      return "Password does not exceed 8 characters. Please try again.";
-    } else if (password !== passwordConfirmation) {
-      return "Password does not match";
-    } else {
-      return false;
-    }
-  }
-
   async function createAccount(url, username, password) {
     const body = {
       username: username,
       password: password,
     };
-
     try {
       const createAccountResponse = await fetch(url, {
         method: "POST",
@@ -67,6 +52,14 @@ function UserRegistration(props) {
     }
   }
 
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setValues((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
   return (
     <form
       className="log-in-form"
@@ -77,8 +70,8 @@ function UserRegistration(props) {
         {" "}
         Username:
         <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={values.username}
+          onChange={handleChange}
           type="email"
           name="username"
           required
@@ -88,8 +81,8 @@ function UserRegistration(props) {
         {" "}
         Password:
         <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={handleChange}
           type="password"
           name="password"
           required
@@ -99,8 +92,8 @@ function UserRegistration(props) {
         {" "}
         Confirm Password:
         <input
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)}
+          value={values.passwordConfirmation}
+          onChange={handleChange}
           type="password"
           name="passwordConfirmation"
           required
@@ -110,6 +103,22 @@ function UserRegistration(props) {
       {<p id="error-msg">{error}</p>}
     </form>
   );
+}
+
+async function validate(username, password, passwordConfirmation) {
+  if (!username) {
+    return "Email address is required";
+  } else if (!/\S+@\S+\.\S+/.test(username)) {
+    return "Email address is invalid";
+  } else if (!password) {
+    return "Password is required";
+  } else if (password.length < 9) {
+    return "Password does not exceed 8 characters. Please try again.";
+  } else if (password !== passwordConfirmation) {
+    return "Password does not match";
+  } else {
+    return false;
+  }
 }
 
 export default UserRegistration;

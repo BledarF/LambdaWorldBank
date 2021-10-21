@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import UserLogin from "./Components/UserLogin/UserLogin.js";
 import UserRegistration from "./Components/UserRegistration/UserRegistration.js";
 import SearchData from "./Components/SearchData/SearchData.js";
+import Chart from "./Components/Chart/TestChart";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";
@@ -60,6 +61,13 @@ function App() {
                   <UserRegistration />
                 </div>
               )}
+              <Route />
+            <Route path="/chart">
+              <Chart />
+            </Route>
+            <Route exact path="/">
+              <UserLogin />
+              <UserRegistration />
             </Route>
           </Switch>
         </main>
