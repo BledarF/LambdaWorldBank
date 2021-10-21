@@ -1,9 +1,11 @@
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 
-function Navigation() {
+function Navigation(props) {
+  const { loggedIn } = props;
+
   return (
-    <Navbar bg="light" vairant="dark" expand="lg">
+    <Navbar bg="danger" vairant="dark" sticky="top">
       <Container>
         <Navbar.Brand href="/home">Team Lambda World Bank Data</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
