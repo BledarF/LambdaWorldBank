@@ -39,7 +39,7 @@ function App() {
     <Router>
       {/* <Header /> */}
       <div className="App">
-        {/* <Nav /> */}
+        {loggedIn ? <Nav loggedIn={loggedIn} /> : null}
         <main className="App-header">
           <Switch>
             <Route exact path="/home">
