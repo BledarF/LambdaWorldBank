@@ -61,7 +61,6 @@ ORDER BY d.Year
           const yrange = rows.map((row) => {
             return row.avg_value;
           });
-          console.log(xrange);
           res.status(201).send({
             data: {
               title: title,
