@@ -5,6 +5,7 @@ import UserLogin from "./Components/UserLogin/UserLogin.js";
 import UserRegistration from "./Components/UserRegistration/UserRegistration.js";
 import SearchData from "./Components/SearchData/SearchData.js";
 import Chart from "./Components/Chart/TestChart";
+import Nav from "./Components/Nav/Nav.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -38,6 +39,7 @@ function App() {
     <Router>
       {/* <Header /> */}
       <div className="App">
+        {/* <Nav /> */}
         <main className="App-header">
           <Switch>
             <Route exact path="/home">
@@ -50,7 +52,7 @@ function App() {
                 />
               )}
             </Route>
-            <Route path="/">
+            <Route exact path="/">
               {loggedIn ? (
                 <Redirect to="/home" />
               ) : (

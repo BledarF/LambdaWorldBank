@@ -35,11 +35,11 @@ function Logout(props) {
     }
   }
 
-  return (
+  return loggedIn ? (
     <Button id="logout" onClick={handleLogout}>
-      Logout!{" "}
+      Logout! <p>{error}</p>
     </Button>
-  );
+  ) : null;
 }
 
 export default Logout;
