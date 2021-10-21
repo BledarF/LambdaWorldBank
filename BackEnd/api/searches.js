@@ -23,21 +23,21 @@ pool.query("SELECT NOW()", (err, res) => {
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
-  const { LongName, IndicatorName, StartYear, EndYear } = req.body.search;
+  const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
 
-  if (!LongName || !IndicatorName || !StartYear || !EndYear) {
+  if (!ShortName || !IndicatorName || !StartYear || !EndYear) {
     return res.sendStatus(400);
   }
   const client = await pool.connect();
 
-  const values = [LongName, IndicatorName, StartYear, EndYear];
+  const values = [ShortName, IndicatorName, StartYear, EndYear];
 
   const sql = `
-    SELECT countries.longname, indicators.indicatorname, indicators.year, indicators.value
+    SELECT countries.shortname, indicators.indicatorname, indicators.year, indicators.value
     FROM countries 
     JOIN indicators
       ON countries.countrycode = indicators.countrycode
-    WHERE countries.longname = $1
+    WHERE countries.shortname = $1
       AND indicators.indicatorname = $2
       AND indicators.year BETWEEN $3 AND $4
     ;`;
@@ -49,7 +49,7 @@ searchesRouter.post("/", async (req, res, next) => {
     } else {
       const data = sendData(
         IndicatorName,
-        LongName,
+        ShortName,
         StartYear,
         EndYear,
         result.rows
@@ -61,9 +61,9 @@ searchesRouter.post("/", async (req, res, next) => {
 
 module.exports = searchesRouter;
 
-function sendData(IndicatorName, LongName, StartYear, EndYear, result) {
+function sendData(IndicatorName, ShortName, StartYear, EndYear, result) {
   console.log(result);
-  const title = `${IndicatorName} for ${LongName} from ${StartYear} to ${EndYear}`;
+  const title = `${IndicatorName} for ${ShortName} from ${StartYear} to ${EndYear}`;
   const xaxis = "Year";
   const yaxis = `${IndicatorName}`;
   const xrange = result.map((row) => {
