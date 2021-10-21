@@ -24,7 +24,6 @@ function App() {
     const jsonResponse = await response.json();
     console.log(jsonResponse);
     if (jsonResponse.success) {
-      console.log("Yes I logged in");
       setLogin(true);
       // const username = jsonResponse.sessions[0].email.split("@")[0];
     } else {

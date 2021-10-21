@@ -30,10 +30,10 @@ function SearchData(props) {
     endYear
   ) {
     const body = {
-      countrySelected: countrySelected,
-      indicatorSelected: indicatorSelected,
-      startYear: startYear,
-      endYear: endYear,
+      LongName: countrySelected,
+      IndicatorName: indicatorSelected,
+      StartYear: startYear,
+      EndYear: endYear,
     };
 
     const addResponse = await fetch(url, {
@@ -42,7 +42,7 @@ function SearchData(props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ search: body }),
     });
     return addResponse;
   }
