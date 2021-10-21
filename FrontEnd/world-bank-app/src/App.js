@@ -1,18 +1,13 @@
 import "./App.css";
 
 import React, { useEffect, useState } from "react";
-<<<<<<< Updated upstream
-import UserLogin from "./Components/UserLogin.js";
-import UserRegistration from "./Components/UserRegistration.js";
-import SearchData from "./Components/SearchData.js";
-=======
+
 import UserLogin from "./Components/UserLogin/UserLogin.js";
 import UserRegistration from "./Components/UserRegistration/UserRegistration.js";
 import SearchData from "./Components/SearchData/SearchData.js";
 import Chart from "./Components/Chart/TestChart.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
->>>>>>> Stashed changes
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";

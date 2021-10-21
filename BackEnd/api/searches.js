@@ -2,12 +2,9 @@
 
 const express = require("express");
 const searchesRouter = express.Router();
-<<<<<<< Updated upstream
 
 const sqlite3 = require("sqlite3");
 const db = new sqlite3.Database("./lambdadb.sqlite");
-=======
-const sqlite3 = require("sqlite3");
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -112,6 +109,5 @@ searchesRouter.post("/", async (req, res, next) => {
     }
   });
 });
->>>>>>> Stashed changes
 
 module.exports = searchesRouter;
