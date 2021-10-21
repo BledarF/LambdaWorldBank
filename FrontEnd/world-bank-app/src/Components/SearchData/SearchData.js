@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logout from "./Logout.js";
+import Logout from "../Logout.js";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
@@ -20,8 +20,6 @@ function SearchData(props) {
     );
 
     const jsonResponse = await response.json();
-
-    console.log(jsonResponse);
   }
 
   async function searchInfo(
