@@ -20,6 +20,61 @@ pool.query("SELECT NOW()", (err, res) => {
   // pool.end();
 });
 
+// Get all countries
+searchesRouter.get("/countries", async (req, res, next) => {
+  const client = await pool.connect();
+  const sql = `
+    SELECT *
+    FROM countries
+    ORDER BY shortname;
+  `;
+  client.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      const countries = result.rows.map((country) => {
+        return country.shortname;
+      });
+      res.status(200).send({ countries: countries });
+    }
+  });
+});
+
+// Get indicators for chosen country
+searchesRouter.get("/indicators", async (req, res, next) => {
+  // Chosen country
+  const { ShortName } = req.body.search;
+
+  if (!ShortName) {
+    return res.sendStatus(400);
+  }
+
+  const client = await pool.connect();
+  const sql = `
+    SELECT DISTINCT indicators.indicatorname
+    FROM indicators 
+    JOIN countries
+      ON countries.countrycode = indicators.countrycode
+    WHERE countries.shortname = $1
+      AND indicators.indicatorname IS NOT NULL
+    ORDER BY indicators.indicatorname;
+  `;
+  const values = [ShortName];
+
+  client.query(sql, values, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      const indicatorsForCountry = result.rows.map((indics) => {
+        return indics.indicatorname;
+      });
+      res.status(200).send({ indicatorsForCountry: indicatorsForCountry });
+    }
+  });
+});
+
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
