@@ -54,52 +54,54 @@ function SearchData(props) {
     <div>
       <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
       {/* <NavBar /> */}
-      <Form className="SearchDataContainer" onSubmit={handleSubmit}>
-        <Row>
-          <Col md>
-            <Form.Group>
-              <Form.Label>Countries</Form.Label>
-              <Form.Control
-                value={selectCountry}
-                onChange={(e) => setCountry(e.target.value)}
-                name="countryName"
-                required
-              />
-            </Form.Group>
-          </Col>
-          <Col md>
-            <Form.Group>
-              <Form.Label>Indicators</Form.Label>
-              <Form.Control
-                value={selectIndicator}
-                onChange={(e) => setIndicator(e.target.value)}
-                name="indicatorName"
-                required
-              />
-            </Form.Group>
-          </Col>
-          <Col md>
-            <Form.Group>
-              <Form.Label>Year Range</Form.Label>
-              <Form.Control
-                value={startYear}
-                onChange={(e) => setStartYear(e.target.value)}
-                name="startYear"
-                required
-              />
-              <Form.Control
-                value={endYear}
-                onChange={(e) => setEndYear(e.target.value)}
-                name="endYear"
-                required
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+      <Container>
+        <Form className="SearchDataContainer" onSubmit={handleSubmit}>
+          <Row>
+            <Col md>
+              <Form.Group>
+                <Form.Label>Countries</Form.Label>
+                <Form.Control
+                  value={selectCountry}
+                  onChange={(e) => setCountry(e.target.value)}
+                  name="countryName"
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md>
+              <Form.Group>
+                <Form.Label>Indicators</Form.Label>
+                <Form.Control
+                  value={selectIndicator}
+                  onChange={(e) => setIndicator(e.target.value)}
+                  name="indicatorName"
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md>
+              <Form.Group>
+                <Form.Label>Year Range</Form.Label>
+                <Form.Control
+                  value={startYear}
+                  onChange={(e) => setStartYear(e.target.value)}
+                  name="startYear"
+                  required
+                />
+                <Form.Control
+                  value={endYear}
+                  onChange={(e) => setEndYear(e.target.value)}
+                  name="endYear"
+                  required
+                />
+              </Form.Group>
+            </Col>
+          </Row>
 
-        <Button type="submit">Search</Button>
-        {/* {<p id="error-msg">{error}</p>} */}
-      </Form>
+          <Button type="submit">Search</Button>
+          {/* {<p id="error-msg">{error}</p>} */}
+        </Form>
+      </Container>
     </div>
   );
 }
