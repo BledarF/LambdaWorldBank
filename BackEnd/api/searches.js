@@ -24,7 +24,7 @@ pool.query("SELECT NOW()", (err, res) => {
 searchesRouter.get("/countries", async (req, res, next) => {
   const client = await pool.connect();
   const sql = `
-    SELECT *
+    SELECT DISTINCT shortname
     FROM countries
     ORDER BY shortname;
   `;
