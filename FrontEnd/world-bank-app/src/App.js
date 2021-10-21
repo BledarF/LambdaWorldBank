@@ -1,31 +1,65 @@
 import "./App.css";
 
-import React from "react";
-import UserLogin from "./Components/UserLogin.js";
-import UserRegistration from "./Components/UserRegistration.js";
-import SearchData from "./Components/SearchData.js";
+import React, { useEffect, useState } from "react";
+import UserLogin from "./Components/UserLogin/UserLogin.js";
+import UserRegistration from "./Components/UserRegistration/UserRegistration.js";
+import SearchData from "./Components/SearchData/SearchData.js";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 function App() {
+  const [loggedIn, setLogin] = useState(false);
+
+  useEffect(() => {
+    fetchActiveSession();
+  });
+
+  async function fetchActiveSession() {
+    const fetchActiveSessionUrl = `http://localhost:7000/api/sessions`;
+    const response = await fetch(fetchActiveSessionUrl, {
+      credentials: "include",
+    });
+
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+    if (jsonResponse.success) {
+      console.log("Yes I logged in");
+      setLogin(true);
+      // const username = jsonResponse.sessions[0].email.split("@")[0];
+    } else {
+      setLogin(false);
+    }
+  }
+
   return (
     <Router>
       {/* <Header /> */}
       <div className="App">
         <main className="App-header">
           <Switch>
-            <Route path="/home">
-              <SearchData />
-            </Route>
-            <Route path="/login">
-              <UserLogin />
-            </Route>
-            <Route path="/sign-up">
-              <UserRegistration />
+            <Route exact path="/home">
+              {!loggedIn ? (
+                <Redirect to="/" />
+              ) : (
+                <SearchData
+                  fetchActiveSession={fetchActiveSession}
+                  loggedIn={loggedIn}
+                />
+              )}
             </Route>
             <Route path="/">
-              <UserLogin />
-              <UserRegistration />
+              {loggedIn ? (
+                <Redirect to="/home" />
+              ) : (
+                <div>
+                  <UserLogin
+                    loggedIn={loggedIn}
+                    fetchActiveSession={fetchActiveSession}
+                  />
+                  <UserRegistration />
+                </div>
+              )}
             </Route>
           </Switch>
         </main>
