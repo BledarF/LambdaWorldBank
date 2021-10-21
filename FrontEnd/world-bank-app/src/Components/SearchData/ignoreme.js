@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Logout from "../Logout/Logout.js";
 import Chart from "../Chart/TestChart.js";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import parseJSON from "date-fns/esm/fp/parseJSON/index.js";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
@@ -35,7 +36,14 @@ function SearchData(props) {
     );
 
     const jsonResponse = await response.json();
+<<<<<<< Updated upstream
+
+    console.log(jsonResponse);
+=======
+    console.log(jsonResponse);
+
     setData(jsonResponse);
+>>>>>>> Stashed changes
   }
 
   async function searchInfo(
@@ -88,56 +96,56 @@ function SearchData(props) {
     <div>
       <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
       {/* <NavBar /> */}
-      <Container>
-        <Form className="SearchDataContainer" onSubmit={handleSubmit}>
-          <Row>
-            <Col md>
-              <Form.Group>
-                <Form.Label>Countries</Form.Label>
-                <Form.Control
-                  value={selectCountry}
-                  onChange={(e) => setCountry(e.target.value)}
-                  name="countryName"
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md>
-              <Form.Group>
-                <Form.Label>Indicators</Form.Label>
-                <Form.Control
-                  value={selectIndicator}
-                  onChange={(e) => setIndicator(e.target.value)}
-                  name="indicatorName"
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md>
-              <Form.Group>
-                <Form.Label>Year Range</Form.Label>
-                <Form.Control
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
-                  name="startYear"
-                  required
-                />
-                <Form.Control
-                  value={endYear}
-                  onChange={(e) => setEndYear(e.target.value)}
-                  name="endYear"
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
+      <Form className="SearchDataContainer" onSubmit={handleSubmit}>
+        <Row>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Countries</Form.Label>
+              <Form.Control
+                value={selectCountry}
+                onChange={(e) => setCountry(e.target.value)}
+                name="countryName"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Indicators</Form.Label>
+              <Form.Control
+                value={selectIndicator}
+                onChange={(e) => setIndicator(e.target.value)}
+                name="indicatorName"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group>
+              <Form.Label>Year Range</Form.Label>
+              <Form.Control
+                value={startYear}
+                onChange={(e) => setStartYear(e.target.value)}
+                name="startYear"
+                required
+              />
+              <Form.Control
+                value={endYear}
+                onChange={(e) => setEndYear(e.target.value)}
+                name="endYear"
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
+=======
           <Button type="submit">Search</Button>
-
           {/* {<p id="error-msg">{error}</p>} */}
         </Form>
         {graphData ? <Chart graphData={graphData} /> : ""}
       </Container>
+>>>>>>> Stashed changes
     </div>
   );
 }
