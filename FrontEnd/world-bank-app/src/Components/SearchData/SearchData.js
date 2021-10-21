@@ -31,7 +31,7 @@ function SearchData(props) {
     endYear
   ) {
     const body = {
-      LongName: countrySelected,
+      ShortName: countrySelected,
       IndicatorName: indicatorSelected,
       StartYear: startYear,
       EndYear: endYear,
