@@ -128,6 +128,7 @@ function sendData(IndicatorName, ShortName, StartYear, EndYear, result) {
     return row.value;
   });
   const data = {
+    country: ShortName,
     title: title,
     xaxis: xaxis,
     yaxis: yaxis,
