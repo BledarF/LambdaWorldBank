@@ -43,26 +43,14 @@ searchesRouter.get("/countries", async (req, res, next) => {
 
 // Get indicators for chosen country
 searchesRouter.get("/indicators", async (req, res, next) => {
-  // Chosen country
-  const { ShortName } = req.body.search;
-
-  if (!ShortName) {
-    return res.sendStatus(400);
-  }
-
   const client = await pool.connect();
   const sql = `
     SELECT DISTINCT indicators.indicatorname
     FROM indicators 
-    JOIN countries
-      ON countries.countrycode = indicators.countrycode
-    WHERE countries.shortname = $1
-      AND indicators.indicatorname IS NOT NULL
     ORDER BY indicators.indicatorname;
   `;
-  const values = [ShortName];
 
-  client.query(sql, values, (err, result) => {
+  client.query(sql, (err, result) => {
     if (err) {
       console.log(err);
       res.sendStatus(500);
