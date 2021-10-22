@@ -61,7 +61,6 @@ sessionsRouter.post("/", async (req, res, next) => {
     const authenticatePassword = await bcrypt.compare(password, hashedPassword);
 
     if (authenticatePassword) {
-      console.log("I was here");
       const { insertSessionIdQuery, values, sessionId } =
         await generateSessionCookie(result.id);
 

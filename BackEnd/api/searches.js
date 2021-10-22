@@ -47,7 +47,8 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   const sql = `
     SELECT DISTINCT indicators.indicatorname
     FROM indicators 
-    ORDER BY indicators.indicatorname;
+    ORDER BY indicators.indicatorname
+    LIMIT 100
   `;
 
   client.query(sql, (err, result) => {
@@ -59,6 +60,27 @@ searchesRouter.get("/indicators", async (req, res, next) => {
         return indics.indicatorname;
       });
       res.status(200).send({ indicatorsForCountry: indicatorsForCountry });
+    }
+  });
+});
+
+// Get all years
+searchesRouter.get("/years", async (req, res, next) => {
+  const client = await pool.connect();
+  const sql = `
+    SELECT DISTINCT year
+    FROM indicators
+    ORDER BY year;
+  `;
+  client.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      const years = result.rows.map((year) => {
+        return year.year;
+      });
+      res.status(200).send({ years: years });
     }
   });
 });
@@ -90,6 +112,7 @@ searchesRouter.post("/", async (req, res, next) => {
       console.log(err);
       res.sendStatus(500);
     } else {
+      // lambdaDb.run(sql, values, ...)
       const data = sendData(
         IndicatorName,
         ShortName,
