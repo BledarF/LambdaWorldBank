@@ -3,6 +3,9 @@
 const express = require("express");
 const searchesRouter = express.Router();
 const sqlite3 = require("sqlite3");
+const lambdaDb = new sqlite3.Database("./database/lambdaDb.db");
+const cookie = require("cookie-parser");
+searchesRouter.use(cookie());
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -47,8 +50,7 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   const sql = `
     SELECT DISTINCT indicators.indicatorname
     FROM indicators 
-    ORDER BY indicators.indicatorname
-    LIMIT 100
+    ORDER BY indicators.indicatorname;
   `;
 
   client.query(sql, (err, result) => {
@@ -89,6 +91,7 @@ searchesRouter.get("/years", async (req, res, next) => {
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
   const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
+  const uuid = req.cookies.sessionId;
 
   if (!ShortName || !IndicatorName || !StartYear || !EndYear) {
     return res.sendStatus(400);
@@ -112,6 +115,34 @@ searchesRouter.post("/", async (req, res, next) => {
       console.log(err);
       res.sendStatus(500);
     } else {
+      const sql5 = "SELECT user_id FROM sessions WHERE uuid = $uuid";
+      const val5 = { $uuid: uuid };
+      lambdaDb.get(sql5, val5, (err, row) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const { user_id } = row;
+          const currentDateAndTime = new Date();
+          const sql2 = `
+      INSERT INTO searches (country_id, metric_id, user_id, start_year, end_year, searched_at)
+      VALUES ($country_id, $metric_id, $user_id, $start_year, $end_year, $searched_at)
+      `;
+          const values2 = {
+            $country_id: ShortName,
+            $metric_id: IndicatorName,
+            $user_id: user_id,
+            $start_year: StartYear,
+            $end_year: EndYear,
+            $searched_at: currentDateAndTime.toISOString(),
+          };
+          lambdaDb.run(sql2, values2, (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+      });
+
       // lambdaDb.run(sql, values, ...)
       const data = sendData(
         IndicatorName,
