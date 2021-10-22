@@ -6,6 +6,7 @@ import UserRegistration from "./Components/UserRegistration/UserRegistration.js"
 import SearchData from "./Components/SearchData/SearchData.js";
 import Chart from "./Components/Chart/TestChart";
 import Nav from "./Components/Nav/Nav.js";
+import History from "./Components/History/History";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -17,7 +18,7 @@ function App() {
 
   useEffect(() => {
     fetchActiveSession();
-  });
+  }, []);
 
   async function fetchActiveSession() {
     const fetchActiveSessionUrl = `http://localhost:7000/api/sessions`;
@@ -67,6 +68,9 @@ function App() {
             </Route>
             <Route path="/chart">
               <Chart />
+            </Route>
+            <Route path="/history">
+              <History />
             </Route>
             <Route exact path="/">
               <UserLogin />
