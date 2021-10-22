@@ -96,13 +96,13 @@ searchesRouter.get("/years", async (req, res, next) => {
 // Get search history for particular user
 searchesRouter.get("/history", async (req, res, next) => {
   const uuid = req.cookies.sessionId;
+  console.log(uuid);
   const sql = "SELECT user_id FROM sessions WHERE uuid = $uuid";
   const val = { $uuid: uuid };
   lambdaDb.get(sql, val, (err, row) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(row);
       const { user_id } = row;
       const sql2 = `SELECT * FROM searches WHERE user_id = $user_id`;
       const val2 = { $user_id: user_id };
@@ -164,7 +164,7 @@ searchesRouter.post("/", async (req, res, next) => {
             $user_id: user_id,
             $start_year: StartYear,
             $end_year: EndYear,
-            $searched_at: currentDateAndTime.toISOString(),
+            $searched_at: currentDateAndTime.toString(),
           };
           lambdaDb.run(sql2, values2, (err) => {
             if (err) {
