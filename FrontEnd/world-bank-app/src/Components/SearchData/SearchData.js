@@ -13,8 +13,9 @@ import {
 } from "react-bootstrap";
 
 function SearchData(props) {
-  const [selectCountry, setCountry] = useState();
-  // const [selectedCountries,setCountries] =useState()
+  const [button2, setButton2] = useState();
+
+  const [countries, setCountries] = useState([]);
   const [selectIndicator, setIndicator] = useState();
   const [startYear, setStartYear] = useState();
   const [endYear, setEndYear] = useState();
@@ -42,13 +43,14 @@ function SearchData(props) {
     const submitSearchUrl = `http://localhost:7000/api/searches`;
     const response = await searchInfo(
       submitSearchUrl,
-      selectCountry,
+      countries,
       selectIndicator,
       startYear,
       endYear
     );
 
     const jsonResponse = await response.json();
+    console.log(jsonResponse);
 
     if (endYear < startYear) {
       setError("Your end year must be greater than your start year!");
@@ -62,13 +64,13 @@ function SearchData(props) {
 
   async function searchInfo(
     url,
-    countrySelected,
+    countries,
     indicatorSelected,
     startYear,
     endYear
   ) {
     const body = {
-      ShortName: countrySelected,
+      ShortName: countries,
       IndicatorName: indicatorSelected,
       StartYear: startYear,
       EndYear: endYear,
@@ -114,6 +116,26 @@ function SearchData(props) {
     setAllYears(jsonResponse.years);
   }
 
+  function handleClick(e) {
+    setButton2(
+      <Col md>
+        <DropdownButton
+          id="dropdown-basic-button"
+          title={countries[1] ? "Select Country" : countries[1]}
+        >
+          {allCountries.map((country) => (
+            <Dropdown.Item
+              onClick={() => setCountries([...countries, country])}
+            >
+              {country}
+            </Dropdown.Item>
+          ))}
+        </DropdownButton>
+      </Col>
+    );
+    console.log(countries);
+  }
+
   return (
     <div>
       <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
@@ -124,14 +146,21 @@ function SearchData(props) {
             <Col md>
               <DropdownButton
                 id="dropdown-basic-button"
-                title={!selectCountry ? "Select Country" : selectCountry}
+                title={!countries[0] ? "Select Country" : countries[0]}
               >
                 {allCountries.map((country) => (
-                  <Dropdown.Item onClick={() => setCountry(country)}>
+                  <Dropdown.Item
+                    onClick={() => setCountries([...countries, country])}
+                  >
                     {country}
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
+
+              <Button id="add" onClick={(e) => handleClick(e)}>
+                {countries.length !== 2 ? "+" : countries[1]}
+              </Button>
+              {button2 ? button2 : null}
             </Col>
             <Col md>
               <Form.Group>
@@ -178,7 +207,7 @@ function SearchData(props) {
             </Col>
           </Row>
 
-          <Button type="submit">Search</Button>
+          <Button type="submit">Search {console.log(countries)}</Button>
         </Form>
         {error === "" ? (
           graphData ? (
