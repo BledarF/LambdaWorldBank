@@ -96,6 +96,7 @@ searchesRouter.get("/years", async (req, res, next) => {
 // Get search history for particular user
 searchesRouter.get("/history", async (req, res, next) => {
   const uuid = req.cookies.sessionId;
+  console.log(uuid);
   const sql = "SELECT user_id FROM sessions WHERE uuid = $uuid";
   const val = { $uuid: uuid };
   lambdaDb.get(sql, val, (err, row) => {
@@ -106,7 +107,7 @@ searchesRouter.get("/history", async (req, res, next) => {
       const { user_id } = row;
       const sql2 = `SELECT * FROM searches WHERE user_id = $user_id`;
       const val2 = { $user_id: user_id };
-      lambdaDb.all(sql2, val2, (err, rows) => {
+      lambdaDb.get(sql2, val2, (err, rows) => {
         if (err) {
           console.log(err);
         } else {
