@@ -8,8 +8,9 @@ import {
   Col,
   Button,
   Form,
-  DropdownButton,
   Dropdown,
+  DropdownButton,
+
 } from "react-bootstrap";
 
 function SearchData(props) {
@@ -81,7 +82,6 @@ function SearchData(props) {
 
     const jsonResponse = await addResponse.json();
 
-    console.log(jsonResponse);
 
     setAllCountries(jsonResponse.countries);
   }
@@ -115,7 +115,8 @@ function SearchData(props) {
           <Row>
             <Col md>
               <DropdownButton
-                id="dropdown-menu-scrollable-menu"
+
+                id="dropdown-basic-button"
                 title={!selectCountry ? "Select Country" : selectCountry}
               >
                 {allCountries.map((country) => (

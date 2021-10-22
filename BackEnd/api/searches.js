@@ -64,6 +64,27 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   });
 });
 
+// Get all years
+searchesRouter.get("/years", async (req, res, next) => {
+  const client = await pool.connect();
+  const sql = `
+    SELECT DISTINCT year
+    FROM indicators
+    ORDER BY year;
+  `;
+  client.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      const years = result.rows.map((year) => {
+        return year.year;
+      });
+      res.status(200).send({ years: years });
+    }
+  });
+});
+
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
@@ -91,6 +112,7 @@ searchesRouter.post("/", async (req, res, next) => {
       console.log(err);
       res.sendStatus(500);
     } else {
+      // lambdaDb.run(sql, values, ...)
       const data = sendData(
         IndicatorName,
         ShortName,
