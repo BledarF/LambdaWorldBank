@@ -131,7 +131,7 @@ searchesRouter.post("/", async (req, res, next) => {
     }
     const client = await pool.connect();
 
-    const values = [ShortName, IndicatorName, StartYear, EndYear];
+    const values = [ShortName[0], IndicatorName, StartYear, EndYear];
 
     const sql = `
     SELECT countries.shortname, indicators.indicatorname, indicators.year, indicators.value
@@ -178,25 +178,31 @@ searchesRouter.post("/", async (req, res, next) => {
 
         const data = sendData(
           IndicatorName,
-          ShortName,
+          ShortName[0],
           StartYear,
           EndYear,
           result.rows
         );
+
+        console.log(data);
 
         res.status(201).send({ data: data });
         client.release();
       }
     });
   } else {
+    console.log("eealkadjasmsao");
+
     // 2 COUNTRIES
     const uuid = req.cookies.sessionId;
     const searches = req.body.search;
     const { ShortName, IndicatorName, StartYear, EndYear } = searches;
+    console.log(ShortName[0]);
+    console.log(ShortName[1]);
     const client = await pool.connect();
     const values = [
-      searches.ShortName[0],
-      searches.ShortName[1],
+      ShortName[0],
+      ShortName[1],
       IndicatorName,
       StartYear,
       EndYear,
@@ -206,12 +212,14 @@ searchesRouter.post("/", async (req, res, next) => {
     FROM countries 
     JOIN indicators
       ON countries.countrycode = indicators.countrycode
-    WHERE countries.shortname = $1
-      AND countries.shortname = $2
+    WHERE (countries.shortname = $1
+      OR countries.shortname = $2)
       AND indicators.indicatorname = $3
       AND indicators.year BETWEEN $4 AND $5
+      AND indicators.value IS NOT NULL 
     ;`;
     client.query(sql, values, (err, result) => {
+      console.log(result);
       if (err) {
         console.log(err);
         res.sendStatus(500);
@@ -251,6 +259,7 @@ searchesRouter.post("/", async (req, res, next) => {
           EndYear,
           result.rows
         );
+        console.log(data);
 
         res.status(201).send({ data: data });
         client.release();
@@ -294,17 +303,26 @@ function sendDataTwoCountries(
   const title = `${IndicatorName} for ${ShortName1} and ${ShortName2} from ${StartYear} to ${EndYear}`;
   const xaxis = "Year";
   const yaxis = `${IndicatorName}`;
+
   console.log(result);
-  const xrange = result.map((row) => {
-    return row.year;
+
+  const xrange1 = result.map((row) => {
+    if (row.shortname === ShortName1 && row.year !== undefined) {
+      return row.year;
+    }
+  });
+  const xrange2 = result.map((row) => {
+    if (row.shortname === ShortName2 && row.year !== undefined) {
+      return row.year;
+    }
   });
   const yrange1 = result.map((row) => {
-    if (row.shortname === ShortName1) {
+    if (row.shortname === ShortName1 && row.value !== undefined) {
       return row.value;
     }
   });
   const yrange2 = result.map((row) => {
-    if (row.shortname === ShortName2) {
+    if (row.shortname === ShortName2 && row.value !== undefined) {
       return row.value;
     }
   });
@@ -314,10 +332,13 @@ function sendDataTwoCountries(
     title: title,
     xaxis: xaxis,
     yaxis: yaxis,
-    xrange: xrange,
+    xrange1: xrange1,
+    xrange2: xrange2,
     yrange1: yrange1,
     yrange2: yrange2,
   };
+
+  console.log(data);
 
   return data;
 }

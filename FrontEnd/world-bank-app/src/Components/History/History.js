@@ -20,8 +20,7 @@ function History() {
     const jsonResponse = await addResponse.json();
     console.log(jsonResponse);
 
-    setHistory(jsonResponse); //history should be returned as an object returning search
-    //title search time/date? etc.
+    setHistory(jsonResponse);
   }
   // const { countrySelected, indicatorSelected, startYear, endYear } = history;
 
