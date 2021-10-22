@@ -16,7 +16,6 @@ function SearchData(props) {
   const [button2, setButton2] = useState();
 
   const [countries, setCountries] = useState([]);
-
   const [selectIndicator, setIndicator] = useState();
   const [startYear, setStartYear] = useState();
   const [endYear, setEndYear] = useState();
