@@ -121,17 +121,19 @@ searchesRouter.get("/history", async (req, res, next) => {
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
-  const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
-  const uuid = req.cookies.sessionId;
+  if (!req.body.search.length) {
+    // 1 COUNTRY
+    const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
+    const uuid = req.cookies.sessionId;
 
-  if (!ShortName || !IndicatorName || !StartYear || !EndYear) {
-    return res.sendStatus(400);
-  }
-  const client = await pool.connect();
+    if (!ShortName || !IndicatorName || !StartYear || !EndYear) {
+      return res.sendStatus(400);
+    }
+    const client = await pool.connect();
 
-  const values = [ShortName, IndicatorName, StartYear, EndYear];
+    const values = [ShortName, IndicatorName, StartYear, EndYear];
 
-  const sql = `
+    const sql = `
     SELECT countries.shortname, indicators.indicatorname, indicators.year, indicators.value
     FROM countries 
     JOIN indicators
@@ -141,57 +143,127 @@ searchesRouter.post("/", async (req, res, next) => {
       AND indicators.year BETWEEN $3 AND $4
     ;`;
 
-  client.query(sql, values, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-    } else {
-      const sql5 = "SELECT user_id FROM sessions WHERE uuid = $uuid";
-      const val5 = { $uuid: uuid };
-      lambdaDb.get(sql5, val5, (err, row) => {
-        if (err) {
-          console.log(err);
-        } else {
-          const { user_id } = row;
-          const currentDateAndTime = new Date();
-          const sql2 = `
+    client.query(sql, values, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      } else {
+        const sql5 = "SELECT user_id FROM sessions WHERE uuid = $uuid";
+        const val5 = { $uuid: uuid };
+        lambdaDb.get(sql5, val5, (err, row) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const { user_id } = row;
+            const currentDateAndTime = new Date();
+            const sql2 = `
       INSERT INTO searches (country_id, metric_id, user_id, start_year, end_year, searched_at)
       VALUES ($country_id, $metric_id, $user_id, $start_year, $end_year, $searched_at)
       `;
-          const values2 = {
-            $country_id: ShortName,
-            $metric_id: IndicatorName,
-            $user_id: user_id,
-            $start_year: StartYear,
-            $end_year: EndYear,
-            $searched_at: currentDateAndTime.toString(),
-          };
-          lambdaDb.run(sql2, values2, (err) => {
-            if (err) {
-              console.log(err);
-            }
-          });
-        }
-      });
+            const values2 = {
+              $country_id: ShortName,
+              $metric_id: IndicatorName,
+              $user_id: user_id,
+              $start_year: StartYear,
+              $end_year: EndYear,
+              $searched_at: currentDateAndTime.toString(),
+            };
+            lambdaDb.run(sql2, values2, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          }
+        });
 
-      const data = sendData(
-        IndicatorName,
-        ShortName,
-        StartYear,
-        EndYear,
-        result.rows
-      );
+        const data = sendData(
+          IndicatorName,
+          ShortName,
+          StartYear,
+          EndYear,
+          result.rows
+        );
 
-      res.status(201).send({ data: data });
-      client.release();
-    }
-  });
+        res.status(201).send({ data: data });
+        client.release();
+      }
+    });
+  } else {
+    // 2 COUNTRIES
+    const uuid = req.cookies.sessionId;
+    const searches = req.body.search.map((country) => {
+      return country;
+    });
+    const { ShortName, IndicatorName, StartYear, EndYear } = searches;
+    const client = await pool.connect();
+    const values = [
+      searches[0].ShortName,
+      searches[1].ShortName,
+      IndicatorName,
+      StartYear,
+      EndYear,
+    ];
+    const sql = `
+    SELECT countries.shortname, indicators.indicatorname, indicators.year, indicators.value
+    FROM countries 
+    JOIN indicators
+      ON countries.countrycode = indicators.countrycode
+    WHERE countries.shortname = $1
+      AND countries.shortname = $2
+      AND indicators.indicatorname = $3
+      AND indicators.year BETWEEN $4 AND $5
+    ;`;
+    client.query(sql, values, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      } else {
+        const sql5 = "SELECT user_id FROM sessions WHERE uuid = $uuid";
+        const val5 = { $uuid: uuid };
+        lambdaDb.get(sql5, val5, (err, row) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const { user_id } = row;
+            const currentDateAndTime = new Date();
+            const sql2 = `
+      INSERT INTO searches (country_id, metric_id, user_id, start_year, end_year, searched_at)
+      VALUES ($country_id, $metric_id, $user_id, $start_year, $end_year, $searched_at)
+      `;
+            const values2 = {
+              $country_id: `${searches[0].ShortName} and ${searches[1].ShortName}`,
+              $metric_id: IndicatorName,
+              $user_id: user_id,
+              $start_year: StartYear,
+              $end_year: EndYear,
+              $searched_at: currentDateAndTime.toString(),
+            };
+            lambdaDb.run(sql2, values2, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          }
+        });
+        const data = sendDataTwoCountries(
+          IndicatorName,
+          searches[0].ShortName,
+          searches[1].ShortName,
+          StartYear,
+          EndYear,
+          result.rows
+        );
+
+        res.status(201).send({ data: data });
+        client.release();
+      }
+    });
+  }
 });
 
 module.exports = searchesRouter;
 
 function sendData(IndicatorName, ShortName, StartYear, EndYear, result) {
-  console.log(result);
   const title = `${IndicatorName} for ${ShortName} from ${StartYear} to ${EndYear}`;
   const xaxis = "Year";
   const yaxis = `${IndicatorName}`;
@@ -208,6 +280,45 @@ function sendData(IndicatorName, ShortName, StartYear, EndYear, result) {
     yaxis: yaxis,
     xrange: xrange,
     yrange: yrange,
+  };
+
+  return data;
+}
+
+function sendDataTwoCountries(
+  IndicatorName,
+  ShortName1,
+  ShortName2,
+  StartYear,
+  EndYear,
+  result
+) {
+  const title = `${IndicatorName} for ${ShortName1} and ${ShortName2} from ${StartYear} to ${EndYear}`;
+  const xaxis = "Year";
+  const yaxis = `${IndicatorName}`;
+  console.log(result);
+  const xrange = result.map((row) => {
+    return row.year;
+  });
+  const yrange1 = result.map((row) => {
+    if (row.shortname === ShortName1) {
+      return row.value;
+    }
+  });
+  const yrange2 = result.map((row) => {
+    if (row.shortname === ShortName2) {
+      return row.value;
+    }
+  });
+  const data = {
+    country1: ShortName1,
+    country2: ShortName2,
+    title: title,
+    xaxis: xaxis,
+    yaxis: yaxis,
+    xrange: xrange,
+    yrange1: yrange1,
+    yrange2: yrange2,
   };
 
   return data;
