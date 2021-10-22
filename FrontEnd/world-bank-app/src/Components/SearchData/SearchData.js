@@ -10,18 +10,18 @@ import {
   Form,
   Dropdown,
   DropdownButton,
-
 } from "react-bootstrap";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
   const [selectIndicator, setIndicator] = useState();
-  const [startYear, setStartYear] = useState([]);
-  const [endYear, setEndYear] = useState([]);
-  const [graphData, setData] = useState();
+  const [startYear, setStartYear] = useState();
+  const [endYear, setEndYear] = useState();
+  const [graphData, setData] = useState("");
   const [allCountries, setAllCountries] = useState([]);
   const [allIndicators, setAllIndicators] = useState([]);
   const [allYears, setAllYears] = useState([]);
+  const [error, setError] = useState("");
 
   const { fetchActiveSession, loggedIn } = props;
 
@@ -48,7 +48,15 @@ function SearchData(props) {
     );
 
     const jsonResponse = await response.json();
-    setData(jsonResponse);
+
+    if (endYear < startYear) {
+      setError("Your end year must be greater than your start year!");
+    } else if (jsonResponse.data.xrange.length === 0) {
+      setError("Data does not exist. Please select a different indicator.");
+    } else {
+      setError("");
+      setData(jsonResponse);
+    }
   }
 
   async function searchInfo(
@@ -82,7 +90,6 @@ function SearchData(props) {
 
     const jsonResponse = await addResponse.json();
 
-
     setAllCountries(jsonResponse.countries);
   }
 
@@ -115,7 +122,6 @@ function SearchData(props) {
           <Row>
             <Col md>
               <DropdownButton
-
                 id="dropdown-basic-button"
                 title={!selectCountry ? "Select Country" : selectCountry}
               >
@@ -148,17 +154,17 @@ function SearchData(props) {
               <Form.Group>
                 <Form.Label>Year Range</Form.Label>
                 <DropdownButton
-                  id="dropdown-menu-scrollable-menu"
+                  id="dropdown-size-small"
                   title={!startYear ? "Select a start year!" : startYear}
                 >
                   {allYears.map((year) => (
-                    <Dropdown.Item onClick={() => setStartYear(year)}>
+                    <Dropdown.Item size="sm" onClick={() => setStartYear(year)}>
                       {year}
                     </Dropdown.Item>
                   ))}
                 </DropdownButton>
                 <DropdownButton
-                  id="dropdown-menu-scrollable-menu"
+                  id="dropdown-size-small"
                   title={!endYear ? "Select a end year!" : endYear}
                 >
                   {allYears.map((year) => (
@@ -172,10 +178,17 @@ function SearchData(props) {
           </Row>
 
           <Button type="submit">Search</Button>
-
-          {/* {<p id="error-msg">{error}</p>} */}
         </Form>
-        {graphData ? <Chart graphData={graphData} /> : ""}
+        {error === "" ? (
+          graphData ? (
+            <Chart graphData={graphData} />
+          ) : (
+            ""
+          )
+        ) : (
+          <h2> {error} </h2>
+        )}
+        {/* {graphData.data.xrange.length !==0 ? <Chart graphData={graphData} /> : ""} */}
       </Container>
     </div>
   );
