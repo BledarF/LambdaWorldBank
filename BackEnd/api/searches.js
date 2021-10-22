@@ -102,6 +102,7 @@ searchesRouter.get("/history", async (req, res, next) => {
     if (err) {
       console.log(err);
     } else {
+      console.log(row);
       const { user_id } = row;
       const sql2 = `SELECT * FROM searches WHERE user_id = $user_id`;
       const val2 = { $user_id: user_id };
@@ -109,7 +110,7 @@ searchesRouter.get("/history", async (req, res, next) => {
         if (err) {
           console.log(err);
         } else {
-          res.send({ rows: rows });
+          res.status(200).send({ rows: rows });
         }
       });
     }
