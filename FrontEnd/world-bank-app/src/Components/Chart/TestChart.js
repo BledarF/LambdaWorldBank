@@ -5,7 +5,8 @@ import { Line } from "react-chartjs-2";
 
 function Chart(props) {
   const { data } = props.graphData;
-  if (!data.xrange2) {
+  console.log(data);
+  if (!data.country2) {
     const { country, title, xaxis, xrange, yaxis, yrange } = data;
     console.log(country);
 
@@ -70,35 +71,30 @@ function Chart(props) {
       country2,
       title,
       xaxis,
-      xrange1,
-      xrange2,
+      xrange,
       yaxis,
       yrange1,
       yrange2,
     } = data;
-
-    const filteredXrange1 = xrange1.filter((num) => num !== undefined);
-    const filteredXrange2 = xrange2.filter((num) => num !== undefined);
-    const filteredYrange1 = yrange1.filter((num) => num !== undefined);
-    const filteredYrange2 = yrange1.filter((num) => num !== undefined);
-
+    console.log("This is data: ", data);
     return (
       <div>
         <Line
           data={{
             name: xaxis,
-            labels: filteredXrange1,
+            labels: xrange,
             datasets: [
               {
                 label: country1,
 
-                data: filteredYrange1,
-                backgroundColor: ["black"],
+                data: yrange1,
+                backgroundColor: ["red"],
                 borderWidth: 4,
               },
               {
                 label: country2,
-                data: filteredYrange2,
+
+                data: yrange2,
                 backgroundColor: ["blue"],
                 borderWidth: 4,
               },
@@ -145,5 +141,4 @@ function Chart(props) {
     );
   }
 }
-
 export default Chart;

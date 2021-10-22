@@ -216,7 +216,8 @@ searchesRouter.post("/", async (req, res, next) => {
       OR countries.shortname = $2)
       AND indicators.indicatorname = $3
       AND indicators.year BETWEEN $4 AND $5
-      AND indicators.value IS NOT NULL 
+      AND indicators.year > 0 
+      AND indicators.value > 0
     ;`;
     client.query(sql, values, (err, result) => {
       console.log(result);
@@ -307,38 +308,76 @@ function sendDataTwoCountries(
   console.log(result);
 
   const xrange1 = result.map((row) => {
-    if (row.shortname === ShortName1 && row.year !== undefined) {
+    if (row.shortname === ShortName1 && row.year > 0) {
       return row.year;
+    }
+  });
+  xrange1final = xrange1.filter((val) => {
+    if (val !== undefined) {
+      return val;
     }
   });
   const xrange2 = result.map((row) => {
-    if (row.shortname === ShortName2 && row.year !== undefined) {
+    if (row.shortname === ShortName2 && row.year > 0) {
       return row.year;
     }
   });
+  xrange2final = xrange2.filter((val) => {
+    if (val !== undefined) {
+      return val;
+    }
+  });
+
+  const valsToRemove = [];
+
+  const xrange = xrange1final.filter((element) => {
+    if (xrange2final.includes(element)) {
+      return xrange2final.includes(element);
+    } else {
+      valsToRemove.push(xrange1final.indexOf(element));
+    }
+  });
+
   const yrange1 = result.map((row) => {
-    if (row.shortname === ShortName1 && row.value !== undefined) {
+    if (row.shortname === ShortName1 && row.value > 0) {
       return row.value;
     }
   });
+  yrange1final = yrange1.filter((val) => {
+    if (val !== undefined) {
+      return val;
+    }
+  });
+  yrange1final2 = yrange1final.filter((val) => {
+    if (valsToRemove.includes(yrange1final.indexOf(val))) {
+      // Do nothing
+    } else {
+      return val;
+    }
+  });
+  console.log(valsToRemove);
+
   const yrange2 = result.map((row) => {
-    if (row.shortname === ShortName2 && row.value !== undefined) {
+    if (row.shortname === ShortName2 && row.value > 0) {
       return row.value;
     }
   });
+  yrange2final = yrange2.filter((val) => {
+    if (val !== undefined) {
+      return val;
+    }
+  });
+
   const data = {
     country1: ShortName1,
     country2: ShortName2,
     title: title,
     xaxis: xaxis,
     yaxis: yaxis,
-    xrange1: xrange1,
-    xrange2: xrange2,
-    yrange1: yrange1,
-    yrange2: yrange2,
+    xrange: xrange,
+    yrange1: yrange1final2,
+    yrange2: yrange2final,
   };
-
-  console.log(data);
 
   return data;
 }
