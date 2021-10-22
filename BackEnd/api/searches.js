@@ -47,7 +47,8 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   const sql = `
     SELECT DISTINCT indicators.indicatorname
     FROM indicators 
-    ORDER BY indicators.indicatorname;
+    ORDER BY indicators.indicatorname
+    LIMIT 100
   `;
 
   client.query(sql, (err, result) => {
