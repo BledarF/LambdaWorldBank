@@ -110,6 +110,7 @@ searchesRouter.get("/history", async (req, res, next) => {
         if (err) {
           console.log(err);
         } else {
+          console.log(rows);
           res.status(200).send({ rows: rows });
         }
       });
