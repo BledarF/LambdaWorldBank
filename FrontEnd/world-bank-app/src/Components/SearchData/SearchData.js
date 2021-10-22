@@ -14,6 +14,7 @@ import {
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
+  // const [selectedCountries,setCountries] =useState()
   const [selectIndicator, setIndicator] = useState();
   const [startYear, setStartYear] = useState();
   const [endYear, setEndYear] = useState();
