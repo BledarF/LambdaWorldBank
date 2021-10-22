@@ -34,11 +34,13 @@ searchesRouter.get("/countries", async (req, res, next) => {
   client.query(sql, (err, result) => {
     if (err) {
       console.log(err);
+      client.release();
       res.sendStatus(500);
     } else {
       const countries = result.rows.map((country) => {
         return country.shortname;
       });
+      client.release();
       res.status(200).send({ countries: countries });
     }
   });
@@ -56,11 +58,13 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   client.query(sql, (err, result) => {
     if (err) {
       console.log(err);
+      client.release();
       res.sendStatus(500);
     } else {
       const indicatorsForCountry = result.rows.map((indics) => {
         return indics.indicatorname;
       });
+      client.release();
       res.status(200).send({ indicatorsForCountry: indicatorsForCountry });
     }
   });
@@ -77,11 +81,13 @@ searchesRouter.get("/years", async (req, res, next) => {
   client.query(sql, (err, result) => {
     if (err) {
       console.log(err);
+      client.release();
       res.sendStatus(500);
     } else {
       const years = result.rows.map((year) => {
         return year.year;
       });
+      client.release();
       res.status(200).send({ years: years });
     }
   });
@@ -151,7 +157,9 @@ searchesRouter.post("/", async (req, res, next) => {
         EndYear,
         result.rows
       );
+
       res.status(201).send({ data: data });
+      client.release();
     }
   });
 });
