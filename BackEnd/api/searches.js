@@ -103,14 +103,14 @@ searchesRouter.get("/history", async (req, res, next) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(row);
       const { user_id } = row;
       const sql2 = `SELECT * FROM searches WHERE user_id = $user_id`;
       const val2 = { $user_id: user_id };
-      lambdaDb.get(sql2, val2, (err, rows) => {
+      lambdaDb.all(sql2, val2, (err, rows) => {
         if (err) {
           console.log(err);
         } else {
+          console.log(rows);
           res.status(200).send({ rows: rows });
         }
       });
@@ -164,7 +164,7 @@ searchesRouter.post("/", async (req, res, next) => {
             $user_id: user_id,
             $start_year: StartYear,
             $end_year: EndYear,
-            $searched_at: currentDateAndTime.toISOString(),
+            $searched_at: currentDateAndTime.toString(),
           };
           lambdaDb.run(sql2, values2, (err) => {
             if (err) {
