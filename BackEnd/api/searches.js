@@ -121,7 +121,7 @@ searchesRouter.get("/history", async (req, res, next) => {
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
   // Search body params
-  if (!req.body.search.length) {
+  if (!req.body.search.ShortName.length) {
     // 1 COUNTRY
     const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
     const uuid = req.cookies.sessionId;
@@ -191,14 +191,12 @@ searchesRouter.post("/", async (req, res, next) => {
   } else {
     // 2 COUNTRIES
     const uuid = req.cookies.sessionId;
-    const searches = req.body.search.map((country) => {
-      return country;
-    });
+    const searches = req.body.search;
     const { ShortName, IndicatorName, StartYear, EndYear } = searches;
     const client = await pool.connect();
     const values = [
-      searches[0].ShortName,
-      searches[1].ShortName,
+      searches.ShortName[0],
+      searches.ShortName[1],
       IndicatorName,
       StartYear,
       EndYear,
@@ -231,7 +229,7 @@ searchesRouter.post("/", async (req, res, next) => {
       VALUES ($country_id, $metric_id, $user_id, $start_year, $end_year, $searched_at)
       `;
             const values2 = {
-              $country_id: `${searches[0].ShortName} and ${searches[1].ShortName}`,
+              $country_id: `${searches.ShortName[0]} and ${searches.ShortName[1]}`,
               $metric_id: IndicatorName,
               $user_id: user_id,
               $start_year: StartYear,
@@ -247,8 +245,8 @@ searchesRouter.post("/", async (req, res, next) => {
         });
         const data = sendDataTwoCountries(
           IndicatorName,
-          searches[0].ShortName,
-          searches[1].ShortName,
+          searches.ShortName[0],
+          searches.ShortName[1],
           StartYear,
           EndYear,
           result.rows
