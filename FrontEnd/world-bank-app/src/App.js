@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     fetchActiveSession();
-  });
+  }, []);
 
   async function fetchActiveSession() {
     const fetchActiveSessionUrl = `http://localhost:7000/api/sessions`;

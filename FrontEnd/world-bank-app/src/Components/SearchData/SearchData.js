@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
+import "./SearchData.css";
 import Logout from "../Logout/Logout.js";
 import Chart from "../Chart/TestChart.js";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
@@ -11,6 +20,8 @@ function SearchData(props) {
   const [graphData, setData] = useState();
   const [allCountries, setAllCountries] = useState([]);
   const [allIndicators, setAllIndicators] = useState([]);
+  const [allYears, setAllYears] = useState([]);
+
   const { fetchActiveSession, loggedIn } = props;
 
   useEffect(() => {
@@ -20,6 +31,7 @@ function SearchData(props) {
   async function fetchAPI() {
     await getCountries();
     await getIndicators();
+    await getYears();
   }
 
   async function handleSubmit(e) {
@@ -71,7 +83,7 @@ function SearchData(props) {
 
     console.log(jsonResponse);
 
-    setAllCountries(jsonResponse);
+    setAllCountries(jsonResponse.countries);
   }
 
   async function getIndicators() {
@@ -79,9 +91,19 @@ function SearchData(props) {
     const addResponse = await fetch(url);
 
     const jsonResponse = await addResponse.json();
+
     console.log(jsonResponse);
 
-    setAllIndicators(jsonResponse);
+    setAllIndicators(jsonResponse.indicatorsForCountry);
+  }
+
+  async function getYears() {
+    const url = "http://localhost:7000/api/searches/years";
+    const addResponse = await fetch(url);
+
+    const jsonResponse = await addResponse.json();
+
+    setAllYears(jsonResponse.years);
   }
 
   return (
@@ -92,42 +114,58 @@ function SearchData(props) {
         <Form className="SearchDataContainer" onSubmit={handleSubmit}>
           <Row>
             <Col md>
-              <Form.Group>
-                <Form.Label>Countries</Form.Label>
-                <Form.Control
-                  value={selectCountry}
-                  onChange={(e) => setCountry(e.target.value)}
-                  name="countryName"
-                  required
-                />
-              </Form.Group>
+              <DropdownButton
+                id="dropdown-menu-scrollable-menu"
+                title={!selectCountry ? "Select Country" : selectCountry}
+              >
+                {allCountries.map((country) => (
+                  <Dropdown.Item onClick={() => setCountry(country)}>
+                    {country}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
             </Col>
             <Col md>
               <Form.Group>
-                <Form.Label>Indicators</Form.Label>
-                <Form.Control
-                  value={selectIndicator}
-                  onChange={(e) => setIndicator(e.target.value)}
-                  name="indicatorName"
-                  required
-                />
+                <DropdownButton
+                  className="indicatorMenu"
+                  title={
+                    !selectIndicator ? "Select Indicator" : selectIndicator
+                  }
+                >
+                  <div className="dropdownMenu">
+                    {allIndicators.map((indicator) => (
+                      <Dropdown.Item onClick={() => setIndicator(indicator)}>
+                        {indicator}
+                      </Dropdown.Item>
+                    ))}
+                  </div>
+                </DropdownButton>
               </Form.Group>
             </Col>
             <Col md>
               <Form.Group>
                 <Form.Label>Year Range</Form.Label>
-                <Form.Control
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
-                  name="startYear"
-                  required
-                />
-                <Form.Control
-                  value={endYear}
-                  onChange={(e) => setEndYear(e.target.value)}
-                  name="endYear"
-                  required
-                />
+                <DropdownButton
+                  id="dropdown-menu-scrollable-menu"
+                  title={!startYear ? "Select a start year!" : startYear}
+                >
+                  {allYears.map((year) => (
+                    <Dropdown.Item onClick={() => setStartYear(year)}>
+                      {year}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                <DropdownButton
+                  id="dropdown-menu-scrollable-menu"
+                  title={!endYear ? "Select a end year!" : endYear}
+                >
+                  {allYears.map((year) => (
+                    <Dropdown.Item onClick={() => setEndYear(year)}>
+                      {year}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
               </Form.Group>
             </Col>
           </Row>

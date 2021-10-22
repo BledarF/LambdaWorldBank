@@ -47,7 +47,8 @@ searchesRouter.get("/indicators", async (req, res, next) => {
   const sql = `
     SELECT DISTINCT indicators.indicatorname
     FROM indicators 
-    ORDER BY indicators.indicatorname;
+    ORDER BY indicators.indicatorname
+    LIMIT 100
   `;
 
   client.query(sql, (err, result) => {
@@ -62,6 +63,17 @@ searchesRouter.get("/indicators", async (req, res, next) => {
     }
   });
 });
+
+// searchesRouter.get('/years', async (req, res, next) => {
+//   const client = await pool.connect();
+//   const sql = `
+//     SELECT DISTINCT indicators.indicatorname
+//     FROM indicators
+//     ORDER BY indicators.indicatorname
+//     LIMIT 100
+//   `;
+
+// )
 
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
@@ -90,6 +102,9 @@ searchesRouter.post("/", async (req, res, next) => {
       console.log(err);
       res.sendStatus(500);
     } else {
+
+    const insertSessionIdQuery =
+    "INSERT INTO searches (uuid, user_id, created_at) VALUES ($uuid, $user_id , datetime('now'))"
       const data = sendData(
         IndicatorName,
         ShortName,
