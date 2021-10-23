@@ -120,8 +120,8 @@ searchesRouter.get("/history", async (req, res, next) => {
 
 // Post user search
 searchesRouter.post("/", async (req, res, next) => {
-  // Search body params
-  if (!req.body.search.ShortName[1]) {
+  if (req.body) {
+    console.log("test");
     // 1 COUNTRY
     const { ShortName, IndicatorName, StartYear, EndYear } = req.body.search;
     const uuid = req.cookies.sessionId;

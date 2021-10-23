@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Nav from "../Nav/Nav.js";
+import "./History.css";
 
-function History() {
+function History(props) {
+  const { loggedIn, fetchActiveSession } = props;
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -23,14 +26,16 @@ function History() {
     setHistory(jsonResponse); //history should be returned as an object returning search
     //title search time/date? etc.
   }
+
   // const { countrySelected, indicatorSelected, startYear, endYear } = history;
 
   return (
     <div>
+      <Nav loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
       {history.length !== 0 ? (
         history.rows.map((search) => {
           return (
-            <div>
+            <div className="Record">
               <h2>Country: {search.country_id}</h2>
               <h2>Indicator: {search.metric_id}</h2>
               <h3>Start Year: {search.start_year}</h3>

@@ -1,8 +1,9 @@
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
+import Logout from "../Logout/Logout.js";
 
 function Navigation(props) {
-  const { loggedIn } = props;
+  const { loggedIn, fetchActiveSession } = props;
 
   return (
     <Navbar bg="danger" vairant="dark" sticky="top">
@@ -11,9 +12,10 @@ function Navigation(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link href="/home">Search</Nav.Link>
             <Nav.Link href="/history">History</Nav.Link>
           </Nav>
+          <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
         </Navbar.Collapse>
       </Container>
     </Navbar>

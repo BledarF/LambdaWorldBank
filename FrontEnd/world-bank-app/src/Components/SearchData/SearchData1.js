@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./SearchData.css";
 import Logout from "../Logout/Logout.js";
 import Chart from "../Chart/TestChart.js";
-import Nav from "../Nav/Nav.js";
 import {
   Container,
   Row,
@@ -15,7 +14,7 @@ import {
 
 function SearchData(props) {
   const [selectCountry, setCountry] = useState();
-  // const [selectedCountries,setCountries] =useState()
+  const [selectedCountries, setCountries] = useState([]);
   const [selectIndicator, setIndicator] = useState();
   const [startYear, setStartYear] = useState();
   const [endYear, setEndYear] = useState();
@@ -117,8 +116,8 @@ function SearchData(props) {
 
   return (
     <div>
-      <Nav loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
-      {/* <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} /> */}
+      <Logout loggedIn={loggedIn} fetchActiveSession={fetchActiveSession} />
+      {/* <NavBar /> */}
       <Container>
         <Form className="SearchDataContainer" onSubmit={handleSubmit}>
           <Row>
@@ -128,7 +127,11 @@ function SearchData(props) {
                 title={!selectCountry ? "Select Country" : selectCountry}
               >
                 {allCountries.map((country) => (
-                  <Dropdown.Item onClick={() => setCountry(country)}>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setCountries([...selectedCountries, country])
+                    }
+                  >
                     {country}
                   </Dropdown.Item>
                 ))}
@@ -137,7 +140,7 @@ function SearchData(props) {
             <Col md>
               <Form.Group>
                 <DropdownButton
-                  id="indicatorMenu"
+                  className="indicatorMenu"
                   title={
                     !selectIndicator ? "Select Indicator" : selectIndicator
                   }
@@ -154,39 +157,32 @@ function SearchData(props) {
             </Col>
             <Col md>
               <Form.Group>
-                <div className="Years">
-                  <DropdownButton
-                    id="dropdown-size-small1"
-                    title={!startYear ? "Select a start year!" : startYear}
-                  >
-                    {allYears.map((year) => (
-                      <Dropdown.Item
-                        size="sm"
-                        onClick={() => setStartYear(year)}
-                      >
-                        {year}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                  <DropdownButton
-                    id="dropdown-size-small2"
-                    title={!endYear ? "Select a end year!" : endYear}
-                  >
-                    {allYears.map((year) => (
-                      <Dropdown.Item onClick={() => setEndYear(year)}>
-                        {year}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </div>
+                <Form.Label>Year Range</Form.Label>
+                <DropdownButton
+                  id="dropdown-size-small"
+                  title={!startYear ? "Select a start year!" : startYear}
+                >
+                  {allYears.map((year) => (
+                    <Dropdown.Item size="sm" onClick={() => setStartYear(year)}>
+                      {year}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                <DropdownButton
+                  id="dropdown-size-small"
+                  title={!endYear ? "Select a end year!" : endYear}
+                >
+                  {allYears.map((year) => (
+                    <Dropdown.Item onClick={() => setEndYear(year)}>
+                      {year}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
               </Form.Group>
             </Col>
           </Row>
-          <div className="wrapper">
-            <Button type="submit" id="submitSearch">
-              Search
-            </Button>
-          </div>
+
+          <Button type="submit">Search</Button>
         </Form>
         {error === "" ? (
           graphData ? (

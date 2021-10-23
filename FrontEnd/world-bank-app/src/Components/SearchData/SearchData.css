@@ -1,5 +1,39 @@
 .dropdown-menu {
   height: 200px;
   overflow-y: scroll;
-  /* width: 380px; */
+  width: 300px;
+  text-align: center;
+  position: center;
+}
+
+#dropdown-basic-button {
+  width: 300px;
+  text-align: center;
+}
+
+#indicatorMenu {
+  width: 300px;
+  text-align: center;
+}
+
+.Years {
+  display: flex;
+}
+
+#dropdown-size-small1 {
+  margin-right: 30px;
+  width: 300px;
+}
+
+#dropdown-size-small2 {
+  width: 300px;
+}
+
+.wrapper {
+  text-align: center;
+}
+
+#submitSearch {
+  margin: 10px;
+  width: 200px;
 }
