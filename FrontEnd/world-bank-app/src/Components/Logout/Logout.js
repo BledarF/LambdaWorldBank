@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import "./Logout.css";
 
 function Logout(props) {
   const [error, setError] = useState("");
